@@ -112,7 +112,7 @@ class WelcomeScreen extends StatelessWidget {
                       style: const TextStyle(color: Colors.blue),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          print('Terms');
+                          Navigator.pushNamed(context, '/terms');
                         }),
                   const TextSpan(text: ', '),
                   TextSpan(
@@ -120,7 +120,7 @@ class WelcomeScreen extends StatelessWidget {
                       style: const TextStyle(color: Colors.blue),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          print('Privacy Policy');
+                          Navigator.pushNamed(context, '/privacyPolicy');
                         }),
                   const TextSpan(text: ', and '),
                   TextSpan(
@@ -128,7 +128,7 @@ class WelcomeScreen extends StatelessWidget {
                       style: const TextStyle(color: Colors.blue),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          print('Cookie Use');
+                          Navigator.pushNamed(context, '/cookies');
                         }),
                   const TextSpan(text: '.'),
                 ],
