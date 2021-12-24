@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:twitter/home_screen.dart';
+import 'package:twitter/profile_screen.dart';
 import 'package:twitter/signin_screen.dart';
 import 'package:twitter/signup_screen.dart';
 import 'package:twitter/terms/cookie_screen.dart';
@@ -19,7 +20,8 @@ void main() {
       '/signup': (context) => const SignUpScreen(),
       '/signin': (context) => const SignInScreen(),
       '/home': (context) => const HomeScreen(),
+      '/profile': (context) => const ProfileScreen(),
     },
-    initialRoute: '/welcome',
+    initialRoute: '/profile',
   ));
 }
