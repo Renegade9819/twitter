@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twitter/another_profile_screen.dart';
 import 'package:twitter/home_screen.dart';
 import 'package:twitter/profile_screen.dart';
 import 'package:twitter/signin_screen.dart';
@@ -20,7 +21,7 @@ void main() {
       '/signup': (context) => const SignUpScreen(),
       '/signin': (context) => const SignInScreen(),
       '/home': (context) => const HomeScreen(),
-      '/profile': (context) => const ProfileScreen(),
+      '/profile': (context) => const AnotherProfileScreen(),
     },
     initialRoute: '/profile',
   ));
