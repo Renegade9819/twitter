@@ -9,6 +9,8 @@ class TweetCard extends StatefulWidget {
 }
 
 class _TweetCardState extends State<TweetCard> {
+  bool isLiked = false;
+  bool isRetweeted = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -18,11 +20,14 @@ class _TweetCardState extends State<TweetCard> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                CircleAvatar(
-                  radius: 22,
-                  backgroundColor: Colors.white,
-                  backgroundImage: NetworkImage(
-                      "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
+                  child: CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Colors.white,
+                    backgroundImage: NetworkImage(
+                        "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"),
+                  ),
                 ),
                 Flexible(
                   child: Padding(
@@ -81,7 +86,12 @@ class _TweetCardState extends State<TweetCard> {
                               padding: EdgeInsets.zero,
                               splashRadius: 20,
                               constraints: BoxConstraints(),
-                              onPressed: () {},
+                              color: isRetweeted ? Colors.green : Colors.black,
+                              onPressed: () {
+                                setState(() {
+                                  isRetweeted = !isRetweeted;
+                                });
+                              },
                               icon: Icon(CupertinoIcons.arrow_2_squarepath),
                             ),
                             IconButton(
@@ -91,8 +101,15 @@ class _TweetCardState extends State<TweetCard> {
                               padding: EdgeInsets.zero,
                               splashRadius: 20,
                               constraints: BoxConstraints(),
-                              onPressed: () {},
-                              icon: Icon(CupertinoIcons.heart),
+                              color: isLiked ? Colors.red : Colors.black,
+                              onPressed: () {
+                                setState(() {
+                                  isLiked = !isLiked;
+                                });
+                              },
+                              icon: isLiked
+                                  ? Icon(CupertinoIcons.heart_fill)
+                                  : Icon(CupertinoIcons.heart),
                             ),
                             IconButton(
                               splashColor: Colors.transparent,
