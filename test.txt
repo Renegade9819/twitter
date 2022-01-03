@@ -1,2 +1,0 @@
-Test file to check checkout command
-change in file
