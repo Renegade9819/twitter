@@ -25,6 +25,6 @@ void main() {
       '/profile': (context) => const AnotherProfileScreen(),
       '/tweet': (context) => const TweetCard(),
     },
-    initialRoute: '/tweet',
+    initialRoute: '/home',
   ));
 }

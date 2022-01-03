@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter/navigation_bar_screens/feed_screen.dart';
 import 'package:twitter/navigation_bar_screens/message_screen.dart';
@@ -58,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Center(
           child: _pages.elementAt(_selectedIndex),
         ),
+        floatingActionButton: buildFAB(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
@@ -84,6 +86,28 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  FloatingActionButton buildFAB(int index) {
+    if (index == 2) {
+      return FloatingActionButton(
+        backgroundColor: Colors.blue,
+        onPressed: () {},
+        child: const Icon(
+          Icons.chat_rounded,
+          color: Colors.white,
+        ),
+      );
+    } else {
+      return FloatingActionButton(
+        backgroundColor: Colors.blue,
+        onPressed: () {},
+        child: const Icon(
+          Icons.auto_awesome,
+          color: Colors.white,
+        ),
+      );
+    }
   }
 
   Widget buildAppBarTitle(int index) {
