@@ -11,6 +11,8 @@ class TweetCard extends StatefulWidget {
 class _TweetCardState extends State<TweetCard> {
   bool isLiked = false;
   bool isRetweeted = false;
+  bool containsPhoto = true;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -65,6 +67,7 @@ class _TweetCardState extends State<TweetCard> {
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.visible,
                         ),
+                        buildMedia(containsPhoto),
                         SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,5 +145,22 @@ class _TweetCardState extends State<TweetCard> {
         ),
       ),
     );
+  }
+
+  Widget buildMedia(bool containsPhoto) {
+    if (containsPhoto) {
+      return Container(
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image.network(
+            "https://images.unsplash.com/photo-1641113994135-a9f230b1f9b0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+            fit: BoxFit.contain,
+          ),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 }
