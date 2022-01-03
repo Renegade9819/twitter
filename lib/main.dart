@@ -7,7 +7,7 @@ import 'package:twitter/signup_screen.dart';
 import 'package:twitter/terms/cookie_screen.dart';
 import 'package:twitter/terms/privacy_screen.dart';
 import 'package:twitter/terms/terms_screen.dart';
-import 'package:twitter/components/tweet_card.dart';
+import 'package:twitter/tweet_card.dart';
 import 'package:twitter/welcome_screen.dart';
 
 void main() {
