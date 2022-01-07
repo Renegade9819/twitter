@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:twitter/another_profile_screen.dart';
+import 'package:twitter/chat_screen.dart';
 import 'package:twitter/components/message_tile.dart';
 import 'package:twitter/components/tweet_card.dart';
 import 'package:twitter/home_screen.dart';
@@ -29,8 +30,9 @@ void main() {
         '/tweetCard': (context) => const TweetCard(),
         '/messageTile': (context) => const MessageTile(),
         '/tweetScreen': (context) => const TweetScreen(),
+        '/chatScreen': (context) => const ChatScreen(),
       },
-      initialRoute: '/tweetScreen',
+      initialRoute: '/chatScreen',
     ),
   );
 }
