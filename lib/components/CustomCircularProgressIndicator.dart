@@ -12,7 +12,7 @@ class CustomCircularProgressIndicator extends StatefulWidget {
 
 class _CustomCircularProgressIndicatorState
     extends State<CustomCircularProgressIndicator> {
-  double? progressValue;
+  double progressValue = 0;
 
   @override
   void initState() {
