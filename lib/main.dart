@@ -32,7 +32,7 @@ void main() {
         '/tweetScreen': (context) => const TweetScreen(),
         '/chatScreen': (context) => const ChatScreen(),
       },
-      initialRoute: '/chatScreen',
+      initialRoute: '/signup',
     ),
   );
 }

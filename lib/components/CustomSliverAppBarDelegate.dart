@@ -68,11 +68,13 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
           ),
           Positioned(
             top: 10,
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.arrow_back_ios_new),
-              color: Colors.white,
-            ),
+            child: shrinkOffset * 0.7 > 40
+                ? SizedBox.shrink()
+                : IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.arrow_back_ios_new),
+                    color: Colors.white,
+                  ),
           ),
         ],
       ),

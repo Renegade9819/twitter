@@ -65,12 +65,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       labelText: 'Password',
                     ),
                     controller: passwordController,
+                    obscureText: true,
                   ),
                 ),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 20),
                 width: screenWidth - 60,
+                height: 50,
                 child: ElevatedButton(
                   onPressed: () {},
                   child: const Text(
@@ -80,9 +82,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                   style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(
-                      const Size(250, 50),
-                    ),
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28.0),
                     )),

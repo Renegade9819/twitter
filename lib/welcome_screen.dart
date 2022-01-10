@@ -9,7 +9,6 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           SafeArea(
             child: Container(
@@ -33,9 +32,10 @@ class WelcomeScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
             child: SizedBox(
               width: double.infinity,
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/signin');
+                  Navigator.pushReplacementNamed(context, '/signin');
                 },
                 child: const Text(
                   'Sign In',
@@ -44,9 +44,6 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 style: ButtonStyle(
-                  fixedSize: MaterialStateProperty.all(
-                    const Size(250, 50),
-                  ),
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(28.0),
                   )),
@@ -81,9 +78,10 @@ class WelcomeScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
             child: SizedBox(
               width: double.infinity,
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/signup');
+                  Navigator.pushReplacementNamed(context, '/signup');
                 },
                 child: const Text(
                   'Sign Up',
@@ -92,9 +90,6 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 style: ButtonStyle(
-                  fixedSize: MaterialStateProperty.all(
-                    const Size(250, 50),
-                  ),
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(28.0),
                   )),

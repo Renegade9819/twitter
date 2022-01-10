@@ -14,8 +14,6 @@ class _ChatScreenState extends State<ChatScreen> {
     true,
   ];
 
-  ScrollController _scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -80,7 +78,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Container(
-                      constraints: BoxConstraints(maxHeight: 50),
+                      constraints: const BoxConstraints(maxHeight: 50),
                       child: const TextField(
                         maxLines: null,
                         decoration: InputDecoration(
@@ -149,7 +147,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: const Padding(
               padding: EdgeInsets.all(10.0),
               child: Text(
-                'Bruh wapifjapw japfja opwjf apow a;on aopwfna',
+                'Bruh wapifjapw japfja opwjf apow a;on aopwfna waofinaw oinf of nwoi fnowi nfoiw nowan awl kfn a nalwkfn a ina lak n',
                 style: TextStyle(color: Colors.white),
               ),
             ),
