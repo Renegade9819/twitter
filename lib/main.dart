@@ -17,7 +17,7 @@ void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Fwitter',
+      title: 'Twitter',
       routes: {
         '/welcome': (context) => const WelcomeScreen(),
         '/terms': (context) => const TermsScreen(),

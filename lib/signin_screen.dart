@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:twitter/components/SignInForm.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -9,12 +10,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -24,7 +21,7 @@ class _SignInScreenState extends State<SignInScreen> {
             children: <Widget>[
               SafeArea(
                 child: Container(
-                  margin: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 50.0),
+                  margin: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 40.0),
                   child: Image.asset(
                     'assets/images/twitterlogo.png',
                     height: 30,
@@ -42,52 +39,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
               ),
-              Center(
-                child: Container(
-                  margin: const EdgeInsets.all(8.0),
-                  width: screenWidth - 60,
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Username',
-                    ),
-                    controller: userNameController,
-                  ),
-                ),
-              ),
-              Center(
-                child: Container(
-                  margin: const EdgeInsets.all(8.0),
-                  width: screenWidth - 60,
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Password',
-                    ),
-                    controller: passwordController,
-                    obscureText: true,
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 20),
-                width: screenWidth - 60,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Sign In',
-                    style: TextStyle(
-                      fontSize: 22,
-                    ),
-                  ),
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28.0),
-                    )),
-                  ),
-                ),
-              ),
+              const SignInForm(),
               Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 10.0),
