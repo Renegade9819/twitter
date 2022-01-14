@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:twitter/models/tweet.dart';
 import 'package:twitter/models/user.dart';
 import 'package:twitter/providers/tweet_provider.dart';
+import 'package:twitter/screens/image_fullscreen.dart';
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/tweet_service.dart';
 import 'package:twitter/services/user_service.dart';
@@ -82,7 +83,7 @@ class _TweetCardState extends State<TweetCard> {
                       overflow: TextOverflow.visible,
                     ),
                     tweet.containsMedia!
-                        ? buildMedia(tweet.mediaURL)
+                        ? buildMedia(tweet.mediaURL, tweet.tweetId, context)
                         : Container(),
                     const SizedBox(height: 10),
                     Row(
@@ -153,20 +154,30 @@ class _TweetCardState extends State<TweetCard> {
     );
   }
 
-  Widget buildMedia(String? mediaURL) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Image.asset(
-          mediaURL!,
-          fit: BoxFit.contain,
+  Widget buildMedia(String? mediaURL, int tweetId, context) {
+    return GestureDetector(
+      child: Hero(
+        tag: 'imageHeroSmall' + tweetId.toString(),
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+          constraints: const BoxConstraints(maxHeight: 200),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              mediaURL!,
+              fit: BoxFit.contain,
+            ),
+          ),
         ),
-        // child: Image.network(
-        //   "https://images.unsplash.com/photo-1641113994135-a9f230b1f9b0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-        //   fit: BoxFit.contain,
-        // ),
       ),
+      onTap: () => {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) {
+            return ImageFullScreen(mediaURL: mediaURL);
+          }),
+        ),
+      },
     );
   }
 }
