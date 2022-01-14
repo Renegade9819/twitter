@@ -5,6 +5,7 @@ import 'package:twitter/providers/tweet_provider.dart';
 import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/screens/another_profile_screen.dart';
 import 'package:twitter/screens/chat_screen.dart';
+import 'package:twitter/screens/edit_profile_screen.dart';
 import 'package:twitter/screens/home_screen.dart';
 import 'package:twitter/screens/signin_screen.dart';
 import 'package:twitter/screens/signup_screen.dart';
@@ -41,6 +42,7 @@ void main() {
           '/messageTile': (context) => const MessageTile(),
           '/tweetScreen': (context) => const TweetScreen(),
           '/chatScreen': (context) => const ChatScreen(),
+          '/editProfile': (context) => const EditProfileScreen(),
         },
         initialRoute: '/welcome',
       ),

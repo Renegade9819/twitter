@@ -15,7 +15,7 @@ class DataStore {
       password: "batman123",
       name: "Bruce Wayne",
       joinDate: DateUtils.dateOnly(DateTime.now()),
-      dob: DateTime.parse('2998-09-03'),
+      dob: DateTime.parse('1998-09-03'),
       avatarURL: "assets/avatars/batman.png");
 
   User superman = User(

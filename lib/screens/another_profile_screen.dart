@@ -83,7 +83,10 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
                         ? Container(
                             margin: const EdgeInsets.only(right: 20),
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/editProfile',
+                                    arguments: currentUser);
+                              },
                               child: const Text(
                                 'Edit Profile',
                                 style: TextStyle(
