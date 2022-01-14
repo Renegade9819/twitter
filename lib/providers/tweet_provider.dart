@@ -12,7 +12,7 @@ class TweetProvider with ChangeNotifier {
 
   void loadAllTweets() {
     allTweets = tweetService.getAllTweets();
-    notifyListeners();
+    //notifyListeners();
   }
 
   void postTweet(Tweet newTweet) {
@@ -26,9 +26,14 @@ class TweetProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleLike(int tweetId, String userName, int index) {
-    Tweet tweet = likedTweets!.elementAt(index);
-    bool? _isTweetLiked = tweet.isLiked;
+  void toggleLike(int tweetId, String userName) {
+    Tweet? tweet;
+    for (Tweet likedTweet in likedTweets!) {
+      if (likedTweet.tweetId == tweetId) {
+        tweet = likedTweet;
+      }
+    }
+    bool? _isTweetLiked = tweet!.isLiked;
     if (_isTweetLiked != null) {
       Tweet updatedTweet = tweet.copyWith(isLiked: !_isTweetLiked);
       if (_isTweetLiked) {

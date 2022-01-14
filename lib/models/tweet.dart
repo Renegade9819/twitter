@@ -10,9 +10,9 @@ class Tweet with _$Tweet {
 
   factory Tweet(
       {required int tweetId,
-      String? tweetBody,
+      required String tweetBody,
       @Default(0) int? likes,
-      bool? isLiked,
+      @Default(false) bool? isLiked,
       bool? containsMedia,
       String? mediaURL,
       required String userName}) = _Tweet;

@@ -35,7 +35,9 @@ class _TweetScreenState extends State<TweetScreen> {
           backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
             icon: const Icon(Icons.close),
             color: Colors.black,
           ),

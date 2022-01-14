@@ -15,8 +15,8 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
       fit: StackFit.expand,
       clipBehavior: Clip.none,
       children: [
-        buildBackground(shrinkOffset),
-        buildAppBar(shrinkOffset),
+        buildBackground(shrinkOffset, context),
+        buildAppBar(shrinkOffset, context),
         Positioned(
           top: top,
           left: 15,
@@ -36,13 +36,15 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
       true;
 
-  Widget buildAppBar(double shrinkOffset) {
+  Widget buildAppBar(double shrinkOffset, context) {
     return Opacity(
       opacity: appear(shrinkOffset),
       child: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new),
-          onPressed: () {},
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: const Text('Profile'),
       ),
@@ -57,7 +59,7 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return 1 - shrinkOffset / expandedHeight;
   }
 
-  Widget buildBackground(double shrinkOffset) {
+  Widget buildBackground(double shrinkOffset, context) {
     return Opacity(
       opacity: disappear(shrinkOffset),
       child: Stack(
@@ -70,10 +72,12 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
           Positioned(
             top: 10,
             child: shrinkOffset * 0.7 > 40
-                ? SizedBox.shrink()
+                ? const SizedBox.shrink()
                 : IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.arrow_back_ios_new),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.arrow_back_ios_new),
                     color: Colors.white,
                   ),
           ),
@@ -87,7 +91,7 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     if (avatarURL == null) {
       imageWidget = const AssetImage("assets/images/default_avatar.png");
     } else {
-      imageWidget = NetworkImage(avatarURL);
+      imageWidget = AssetImage(avatarURL);
     }
     return Opacity(
       opacity: disappear(shrinkOffset),

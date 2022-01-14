@@ -8,9 +8,9 @@ part of 'tweet.dart';
 
 _$_Tweet _$$_TweetFromJson(Map<String, dynamic> json) => _$_Tweet(
       tweetId: json['tweetId'] as int,
-      tweetBody: json['tweetBody'] as String?,
+      tweetBody: json['tweetBody'] as String,
       likes: json['likes'] as int? ?? 0,
-      isLiked: json['isLiked'] as bool?,
+      isLiked: json['isLiked'] as bool? ?? false,
       containsMedia: json['containsMedia'] as bool?,
       mediaURL: json['mediaURL'] as String?,
       userName: json['userName'] as String,

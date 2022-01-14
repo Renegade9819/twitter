@@ -34,14 +34,18 @@ class _HomeScreenState extends State<HomeScreen> {
           leading: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(
-                radius: 18,
-                backgroundColor: Colors.white,
-                backgroundImage: loggedInUser!.avatarURL == null
-                    ? const AssetImage("assets/avatars/default_avatar.png")
-                    : AssetImage(loggedInUser!.avatarURL!),
-                //   backgroundImage: NetworkImage(
-                //       "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"),
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/profile',
+                    arguments: loggedInUser!.userName),
+                child: CircleAvatar(
+                  radius: 18,
+                  backgroundColor: Colors.white,
+                  backgroundImage: loggedInUser!.avatarURL == null
+                      ? const AssetImage("assets/avatars/default_avatar.png")
+                      : AssetImage(loggedInUser!.avatarURL!),
+                  //   backgroundImage: NetworkImage(
+                  //       "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"),
+                ),
               ),
             ],
           ),
@@ -49,7 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
           title: buildAppBarTitle(_selectedIndex),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/welcome', (route) => false);
+              },
               icon: const Icon(
                 Icons.logout,
                 color: Colors.redAccent,
@@ -111,7 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       return FloatingActionButton(
         backgroundColor: Colors.blue,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/tweetScreen');
+        },
         child: const Icon(
           Icons.auto_awesome,
           color: Colors.white,

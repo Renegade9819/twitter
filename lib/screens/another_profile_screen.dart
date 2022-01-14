@@ -7,12 +7,18 @@
 import 'package:extended_sliver/extended_sliver.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter/components/CustomSliverAppBarDelegate.dart';
 import 'package:twitter/components/tweet_card.dart';
 import 'package:twitter/models/user.dart';
+import 'package:twitter/providers/user_provider.dart';
+import 'package:twitter/services/service_locator.dart';
+import 'package:twitter/services/user_service.dart';
 
 class AnotherProfileScreen extends StatefulWidget {
-  const AnotherProfileScreen({Key? key}) : super(key: key);
+  const AnotherProfileScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _AnotherProfileScreenState createState() => _AnotherProfileScreenState();
@@ -21,11 +27,21 @@ class AnotherProfileScreen extends StatefulWidget {
 class _AnotherProfileScreenState extends State<AnotherProfileScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  //UserService userService = UserService.instance;
+
+  UserService userService = serviceLocator<UserService>();
+
   @override
   Widget build(BuildContext context) {
-    // User? user = userService.getUser("batman010");
-    // print(user!.userName);
+    String userName = ModalRoute.of(context)!.settings.arguments as String;
+    User? loggedInUser = Provider.of<UserProvider>(context).loggedInUser;
+    User? currentUser = userService.getUser(userName);
+    bool isLoggedInUser;
+
+    if (loggedInUser!.userName == currentUser!.userName) {
+      isLoggedInUser = true;
+    } else {
+      isLoggedInUser = false;
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: NestedScrollView(
@@ -33,7 +49,7 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
           return [
             SliverPersistentHeader(
               delegate: CustomSliverAppBarDelegate(
-                  expandedHeight: 200, avatarURL: null),
+                  expandedHeight: 200, avatarURL: currentUser.avatarURL),
               pinned: true,
             ),
             SliverList(
@@ -47,14 +63,14 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Name',
+                            currentUser.name,
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            '@Handle',
+                            '@' + currentUser.userName,
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w300,
@@ -63,28 +79,34 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
                         ],
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(right: 20),
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Edit Profile',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
-                        ),
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.white),
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.black26),
-                            side: MaterialStateProperty.all(
-                              const BorderSide(style: BorderStyle.solid),
+                    isLoggedInUser
+                        ? Container(
+                            margin: const EdgeInsets.only(right: 20),
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              child: const Text(
+                                'Edit Profile',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.white),
+                                overlayColor:
+                                    MaterialStateProperty.all(Colors.black26),
+                                side: MaterialStateProperty.all(
+                                  const BorderSide(style: BorderStyle.solid),
+                                ),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                              ),
                             ),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)))),
-                      ),
-                    ),
+                          )
+                        : Container(),
                   ],
                 ),
                 Container(
@@ -100,8 +122,7 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
                           const SizedBox(width: 5),
                           Text(
                             'Born ' +
-                                DateFormat.yMMMd()
-                                    .format('user!.dob' as DateTime),
+                                DateFormat.yMMMd().format(currentUser.dob),
                             style: const TextStyle(fontWeight: FontWeight.w300),
                           ),
                         ],
@@ -116,8 +137,7 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
                           const SizedBox(width: 5),
                           Text(
                             'Joined ' +
-                                DateFormat.yMMMd()
-                                    .format('user.joinDate' as DateTime),
+                                DateFormat.yMMMd().format(currentUser.joinDate),
                             style: const TextStyle(fontWeight: FontWeight.w300),
                           ),
                         ],
@@ -159,6 +179,14 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
           ];
         },
         body: TabBarView(controller: tabController, children: [
+          Text(
+            'Tweets',
+            style: TextStyle(color: Colors.black),
+          ),
+          Text(
+            'Likes',
+            style: TextStyle(color: Colors.black),
+          ),
           // ListView.builder(
           //   itemCount: user!.usertweets.length,
           //   itemBuilder: (context, index) {

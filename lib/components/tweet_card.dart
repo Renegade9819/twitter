@@ -2,38 +2,46 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter/models/tweet.dart';
 import 'package:twitter/models/user.dart';
+import 'package:twitter/providers/tweet_provider.dart';
+import 'package:twitter/services/service_locator.dart';
+import 'package:twitter/services/tweet_service.dart';
+import 'package:twitter/services/user_service.dart';
 
 class TweetCard extends StatefulWidget {
   Tweet tweet;
-  bool likedTweetsList;
-  TweetCard({Key? key, required this.tweet, required this.likedTweetsList})
-      : super(key: key);
+  TweetCard({
+    Key? key,
+    required this.tweet,
+  }) : super(key: key);
 
   @override
   _TweetCardState createState() => _TweetCardState();
 }
 
 class _TweetCardState extends State<TweetCard> {
-  bool isLiked = false;
-  bool isRetweeted = false;
-  bool containsPhoto = true;
+  UserService userService = serviceLocator<UserService>();
+  TweetService tweetService = serviceLocator<TweetService>();
 
   @override
   Widget build(BuildContext context) {
+    User? tweetUser = userService.getUser(widget.tweet.userName);
+    Tweet tweet = widget.tweet;
     return Card(
       child: Container(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/profile'),
+              onTap: () => Navigator.pushNamed(context, '/profile',
+                  arguments: tweetUser!.userName),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
                 child: CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.white,
-                  backgroundImage:
-                      const AssetImage("assets/images/default_avatar.png"),
+                  backgroundImage: tweetUser!.avatarURL == null
+                      ? const AssetImage("assets/avatars/default_avatar.png")
+                      : AssetImage(tweetUser.avatarURL!),
                 ),
               ),
             ),
@@ -48,33 +56,35 @@ class _TweetCardState extends State<TweetCard> {
                     Row(
                       children: <Widget>[
                         Text(
-                          'user.name' as String,
+                          tweetUser.name,
                         ),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         Text(
-                          '@' + ('user.userName' as String),
-                          style: TextStyle(fontWeight: FontWeight.w300),
+                          '@' + tweetUser.userName,
+                          style: const TextStyle(fontWeight: FontWeight.w300),
                         ),
-                        SizedBox(width: 5),
-                        Text(
+                        const SizedBox(width: 5),
+                        const Text(
                           '•',
                           style: TextStyle(fontWeight: FontWeight.w300),
                         ),
-                        SizedBox(width: 5),
-                        Text(
+                        const SizedBox(width: 5),
+                        const Text(
                           '4d',
                           style: TextStyle(fontWeight: FontWeight.w300),
                         ),
                       ],
                     ),
-                    SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Text(
-                      ' usertweet.tweetBody' as String,
+                      tweet.tweetBody,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.visible,
                     ),
-                    buildMedia(false),
-                    SizedBox(height: 10),
+                    tweet.containsMedia!
+                        ? buildMedia(tweet.mediaURL)
+                        : Container(),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -95,12 +105,8 @@ class _TweetCardState extends State<TweetCard> {
                           padding: EdgeInsets.zero,
                           splashRadius: 20,
                           constraints: BoxConstraints(),
-                          color: isRetweeted ? Colors.green : Colors.black,
-                          onPressed: () {
-                            setState(() {
-                              isRetweeted = !isRetweeted;
-                            });
-                          },
+                          color: Colors.green,
+                          onPressed: () {},
                           icon: Icon(CupertinoIcons.arrow_2_squarepath),
                         ),
                         IconButton(
@@ -110,13 +116,9 @@ class _TweetCardState extends State<TweetCard> {
                           padding: EdgeInsets.zero,
                           splashRadius: 20,
                           constraints: BoxConstraints(),
-                          color: isLiked ? Colors.red : Colors.black,
-                          onPressed: () {
-                            setState(() {
-                              isLiked = !isLiked;
-                            });
-                          },
-                          icon: isLiked
+                          color: tweet.isLiked! ? Colors.red : Colors.black,
+                          onPressed: () {},
+                          icon: tweet.isLiked!
                               ? Icon(CupertinoIcons.heart_fill)
                               : Icon(CupertinoIcons.heart),
                         ),
@@ -151,20 +153,20 @@ class _TweetCardState extends State<TweetCard> {
     );
   }
 
-  Widget buildMedia(bool containsPhoto) {
-    if (containsPhoto) {
-      return Container(
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.network(
-            "https://images.unsplash.com/photo-1641113994135-a9f230b1f9b0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-            fit: BoxFit.contain,
-          ),
+  Widget buildMedia(String? mediaURL) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.asset(
+          mediaURL!,
+          fit: BoxFit.contain,
         ),
-      );
-    } else {
-      return Container();
-    }
+        // child: Image.network(
+        //   "https://images.unsplash.com/photo-1641113994135-a9f230b1f9b0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+        //   fit: BoxFit.contain,
+        // ),
+      ),
+    );
   }
 }

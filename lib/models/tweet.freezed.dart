@@ -24,9 +24,9 @@ class _$TweetTearOff {
 
   _Tweet call(
       {required int tweetId,
-      String? tweetBody,
+      required String tweetBody,
       int? likes = 0,
-      bool? isLiked,
+      bool? isLiked = false,
       bool? containsMedia,
       String? mediaURL,
       required String userName}) {
@@ -52,7 +52,7 @@ const $Tweet = _$TweetTearOff();
 /// @nodoc
 mixin _$Tweet {
   int get tweetId => throw _privateConstructorUsedError;
-  String? get tweetBody => throw _privateConstructorUsedError;
+  String get tweetBody => throw _privateConstructorUsedError;
   int? get likes => throw _privateConstructorUsedError;
   bool? get isLiked => throw _privateConstructorUsedError;
   bool? get containsMedia => throw _privateConstructorUsedError;
@@ -70,7 +70,7 @@ abstract class $TweetCopyWith<$Res> {
       _$TweetCopyWithImpl<$Res>;
   $Res call(
       {int tweetId,
-      String? tweetBody,
+      String tweetBody,
       int? likes,
       bool? isLiked,
       bool? containsMedia,
@@ -104,7 +104,7 @@ class _$TweetCopyWithImpl<$Res> implements $TweetCopyWith<$Res> {
       tweetBody: tweetBody == freezed
           ? _value.tweetBody
           : tweetBody // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       likes: likes == freezed
           ? _value.likes
           : likes // ignore: cast_nullable_to_non_nullable
@@ -136,7 +136,7 @@ abstract class _$TweetCopyWith<$Res> implements $TweetCopyWith<$Res> {
   @override
   $Res call(
       {int tweetId,
-      String? tweetBody,
+      String tweetBody,
       int? likes,
       bool? isLiked,
       bool? containsMedia,
@@ -171,7 +171,7 @@ class __$TweetCopyWithImpl<$Res> extends _$TweetCopyWithImpl<$Res>
       tweetBody: tweetBody == freezed
           ? _value.tweetBody
           : tweetBody // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       likes: likes == freezed
           ? _value.likes
           : likes // ignore: cast_nullable_to_non_nullable
@@ -201,9 +201,9 @@ class __$TweetCopyWithImpl<$Res> extends _$TweetCopyWithImpl<$Res>
 class _$_Tweet extends _Tweet {
   _$_Tweet(
       {required this.tweetId,
-      this.tweetBody,
+      required this.tweetBody,
       this.likes = 0,
-      this.isLiked,
+      this.isLiked = false,
       this.containsMedia,
       this.mediaURL,
       required this.userName})
@@ -215,10 +215,11 @@ class _$_Tweet extends _Tweet {
   @override
   final int tweetId;
   @override
-  final String? tweetBody;
+  final String tweetBody;
   @JsonKey()
   @override
   final int? likes;
+  @JsonKey()
   @override
   final bool? isLiked;
   @override
@@ -273,7 +274,7 @@ class _$_Tweet extends _Tweet {
 abstract class _Tweet extends Tweet {
   factory _Tweet(
       {required int tweetId,
-      String? tweetBody,
+      required String tweetBody,
       int? likes,
       bool? isLiked,
       bool? containsMedia,
@@ -286,7 +287,7 @@ abstract class _Tweet extends Tweet {
   @override
   int get tweetId;
   @override
-  String? get tweetBody;
+  String get tweetBody;
   @override
   int? get likes;
   @override

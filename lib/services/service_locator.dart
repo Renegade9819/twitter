@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:twitter/providers/tweet_provider.dart';
 import 'package:twitter/services/tweet_service.dart';
 import 'package:twitter/services/tweet_service_impl.dart';
 import 'package:twitter/services/user_service.dart';
@@ -12,4 +13,6 @@ void setupServiceLocator() {
 
   serviceLocator
       .registerLazySingleton<TweetService>(() => TweetServiceFakeImpl());
+
+  serviceLocator.registerFactory<TweetProvider>(() => TweetProvider());
 }
