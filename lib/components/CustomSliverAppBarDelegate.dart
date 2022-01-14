@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
-
-  const CustomSliverAppBarDelegate({required this.expandedHeight});
+  final String? avatarURL;
+  const CustomSliverAppBarDelegate(
+      {required this.expandedHeight, required this.avatarURL});
 
   @override
   Widget build(
@@ -19,7 +20,7 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
         Positioned(
           top: top,
           left: 15,
-          child: buildAvatar(shrinkOffset),
+          child: buildAvatar(shrinkOffset, avatarURL),
         )
       ],
     );
@@ -81,7 +82,13 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget buildAvatar(double shrinkOffset) {
+  Widget buildAvatar(double shrinkOffset, String? avatarURL) {
+    ImageProvider imageWidget;
+    if (avatarURL == null) {
+      imageWidget = const AssetImage("assets/images/default_avatar.png");
+    } else {
+      imageWidget = NetworkImage(avatarURL);
+    }
     return Opacity(
       opacity: disappear(shrinkOffset),
       child: CircleAvatar(
@@ -90,8 +97,7 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
           minRadius: 39 - shrinkOffset * 0.1,
-          backgroundImage: const NetworkImage(
-              "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"),
+          backgroundImage: imageWidget,
         ),
       ),
     );

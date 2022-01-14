@@ -6,7 +6,10 @@
 
 import 'package:extended_sliver/extended_sliver.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:twitter/components/CustomSliverAppBarDelegate.dart';
+import 'package:twitter/components/tweet_card.dart';
+import 'package:twitter/models/user.dart';
 
 class AnotherProfileScreen extends StatefulWidget {
   const AnotherProfileScreen({Key? key}) : super(key: key);
@@ -18,15 +21,19 @@ class AnotherProfileScreen extends StatefulWidget {
 class _AnotherProfileScreenState extends State<AnotherProfileScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
+  //UserService userService = UserService.instance;
   @override
   Widget build(BuildContext context) {
+    // User? user = userService.getUser("batman010");
+    // print(user!.userName);
     return Scaffold(
       backgroundColor: Colors.white,
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
-            const SliverPersistentHeader(
-              delegate: CustomSliverAppBarDelegate(expandedHeight: 200),
+            SliverPersistentHeader(
+              delegate: CustomSliverAppBarDelegate(
+                  expandedHeight: 200, avatarURL: null),
               pinned: true,
             ),
             SliverList(
@@ -38,17 +45,17 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
                       margin: const EdgeInsets.fromLTRB(20, 40, 0, 0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const <Widget>[
+                        children: <Widget>[
                           Text(
                             'Name',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            '@username',
-                            style: TextStyle(
+                            '@Handle',
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w300,
                             ),
@@ -85,29 +92,33 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
                   child: Column(
                     children: <Widget>[
                       Row(
-                        children: const <Widget>[
-                          Icon(
+                        children: <Widget>[
+                          const Icon(
                             Icons.bubble_chart,
                             color: Colors.black54,
                           ),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Text(
-                            'Born September 2, 1998',
-                            style: TextStyle(fontWeight: FontWeight.w300),
+                            'Born ' +
+                                DateFormat.yMMMd()
+                                    .format('user!.dob' as DateTime),
+                            style: const TextStyle(fontWeight: FontWeight.w300),
                           ),
                         ],
                       ),
                       const SizedBox(height: 5),
                       Row(
-                        children: const <Widget>[
-                          Icon(
+                        children: <Widget>[
+                          const Icon(
                             Icons.calendar_today,
                             color: Colors.black54,
                           ),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Text(
-                            'Joined December 2021',
-                            style: TextStyle(fontWeight: FontWeight.w300),
+                            'Joined ' +
+                                DateFormat.yMMMd()
+                                    .format('user.joinDate' as DateTime),
+                            style: const TextStyle(fontWeight: FontWeight.w300),
                           ),
                         ],
                       ),
@@ -147,15 +158,26 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
             ),
           ];
         },
-        body: TabBarView(controller: tabController, children: const [
-          Text(
-            'Tweets',
-            style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            'Likes',
-            style: TextStyle(color: Colors.black),
-          ),
+        body: TabBarView(controller: tabController, children: [
+          // ListView.builder(
+          //   itemCount: user!.usertweets.length,
+          //   itemBuilder: (context, index) {
+          //     print(user.usertweets.elementAt(index).userName);
+          //     return TweetCard(
+          //       tweet: user.usertweets.elementAt(index),
+          //       likedTweetsList: false,
+          //     );
+          //   },
+          // ),
+          // ListView.builder(
+          //   itemCount: user.likedTweets.length,
+          //   itemBuilder: (context, index) {
+          //     return TweetCard(
+          //       tweet: user.likedTweets.elementAt(index),
+          //       likedTweetsList: true,
+          //     );
+          //   },
+          // ),
           Text(
             'Media',
             style: TextStyle(color: Colors.black),

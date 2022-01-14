@@ -1,21 +1,21 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:twitter/models/user.dart';
 
-class Tweet {
-  int? _tweetId;
-  String? _tweetBody;
-  int likes = 0;
-  bool? containsMedia;
-  String? mediaURL;
+part 'tweet.freezed.dart';
+part 'tweet.g.dart';
 
-  User? user;
+@freezed
+class Tweet with _$Tweet {
+  Tweet._();
 
-  void like() {
-    likes = likes + 1;
-  }
+  factory Tweet(
+      {required int tweetId,
+      String? tweetBody,
+      @Default(0) int? likes,
+      bool? isLiked,
+      bool? containsMedia,
+      String? mediaURL,
+      required String userName}) = _Tweet;
 
-  void dislike() {
-    if (likes > 0) {
-      likes = likes - 1;
-    }
-  }
+  factory Tweet.fromJson(Map<String, dynamic> json) => _$TweetFromJson(json);
 }

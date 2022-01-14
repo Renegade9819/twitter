@@ -6,7 +6,9 @@
 
 import 'package:extended_sliver/extended_sliver.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:twitter/components/CustomSliverAppBarDelegate.dart';
+import 'package:twitter/models/user.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -33,12 +35,14 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   Widget build(BuildContext context) {
+    //User? user = userService.getUser("bhavinb98");
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
           const SliverPersistentHeader(
-            delegate: CustomSliverAppBarDelegate(expandedHeight: 200),
+            delegate:
+                CustomSliverAppBarDelegate(expandedHeight: 200, avatarURL: ""),
             pinned: true,
           ),
           SliverList(
@@ -52,14 +56,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Name',
+                          'user.name',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          '@username',
+                          '@' 'user.userName',
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w300,
@@ -104,7 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          'Born September 2, 1998',
+                          'Born ',
                           style: TextStyle(fontWeight: FontWeight.w300),
                         ),
                       ],
@@ -118,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          'Joined December 2021',
+                          'Joined ',
                           style: TextStyle(fontWeight: FontWeight.w300),
                         ),
                       ],

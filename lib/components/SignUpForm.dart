@@ -102,12 +102,7 @@ class _SignUpFormState extends State<SignUpForm> {
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  User user = User();
-                  user.userName = userNameController.text;
-                  user.password = passwordController.text;
-                  user.name = nameController.text;
-                  user.dob = birthDate!;
-                  SignUpUser(user);
+                  //
                 }
               },
               child: const Text(
@@ -129,7 +124,8 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   void SignUpUser(User user) {
-    print("${user.userName} ${user.password} ${user.name} ${user.dob}");
+    // print("${user.userName} ${user.password} ${user.name} ${user.dob}");
+    // userService.registerUser(user);
   }
 
   Future<void> _selectBirthDate(BuildContext context) async {

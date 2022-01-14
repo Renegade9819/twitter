@@ -1,21 +1,21 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:twitter/models/tweet.dart';
 
-class User {
-  String? userName;
-  String? password;
-  String? name;
-  String? avatarURL;
-  DateTime? dob;
-  DateTime? joinDate;
+part 'user.freezed.dart';
+part 'user.g.dart';
 
-  Set<Tweet> usertweets = {};
-  Set<Tweet> likedTweets = {};
+@freezed
+class User with _$User {
+  User._();
 
-  void addTweetToLikes(Tweet tweet) {
-    likedTweets.add(tweet);
-  }
+  factory User({
+    required String userName,
+    required String password,
+    required String name,
+    String? avatarURL,
+    required DateTime dob,
+    required DateTime joinDate,
+  }) = _User;
 
-  void removeTweetFromLikes(Tweet tweet) {
-    likedTweets.remove(tweet);
-  }
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }
