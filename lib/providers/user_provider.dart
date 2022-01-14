@@ -10,6 +10,7 @@ class UserProvider with ChangeNotifier {
 
   void setLoggedInUser(User user) {
     loggedInUser = userService.loginUser(user.userName, user.password);
+    print(loggedInUser!.userName);
     notifyListeners();
   }
 

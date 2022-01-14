@@ -15,7 +15,7 @@ class DataStore {
       password: "batman123",
       name: "Bruce Wayne",
       joinDate: DateUtils.dateOnly(DateTime.now()),
-      dob: DateTime.parse('02-09-1998'),
+      dob: DateTime.parse('2998-09-03'),
       avatarURL: "assets/avatars/batman.png");
 
   User superman = User(
@@ -23,7 +23,7 @@ class DataStore {
     password: "superman123",
     name: "Clark Kent",
     joinDate: DateUtils.dateOnly(DateTime.now()),
-    dob: DateTime.parse('17-07-2000'),
+    dob: DateTime.parse('2000-07-27'),
     avatarURL: "assets/avatars/superman.png",
   );
 
@@ -32,7 +32,7 @@ class DataStore {
     password: "ww123",
     name: "Diana Prince",
     joinDate: DateUtils.dateOnly(DateTime.now()),
-    dob: DateTime.parse('24-06-2002'),
+    dob: DateTime.parse('2002-06-24'),
     avatarURL: "assets/avatars/wonderwoman.png",
   );
 
@@ -41,7 +41,7 @@ class DataStore {
     password: "flash123",
     name: "Barry Allen",
     joinDate: DateUtils.dateOnly(DateTime.now()),
-    dob: DateTime.parse('01-01-2001'),
+    dob: DateTime.parse('2001-01-01'),
     avatarURL: "assets/avatars/flash.png",
   );
 

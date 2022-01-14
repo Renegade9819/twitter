@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter/components/message_tile.dart';
+import 'package:twitter/providers/tweet_provider.dart';
+import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/screens/another_profile_screen.dart';
 import 'package:twitter/screens/chat_screen.dart';
 import 'package:twitter/screens/home_screen.dart';
@@ -15,24 +18,32 @@ import 'package:twitter/terms/terms_screen.dart';
 void main() {
   setupServiceLocator();
   runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Twitter',
-      routes: {
-        '/welcome': (context) => const WelcomeScreen(),
-        '/terms': (context) => const TermsScreen(),
-        '/privacyPolicy': (context) => const PrivacyScreen(),
-        '/cookies': (context) => const CookieScreen(),
-        '/signup': (context) => const SignUpScreen(),
-        '/signin': (context) => const SignInScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/profile': (context) => const AnotherProfileScreen(),
-        //'/tweetCard': (context) =>  TweetCard(),
-        '/messageTile': (context) => const MessageTile(),
-        '/tweetScreen': (context) => const TweetScreen(),
-        '/chatScreen': (context) => const ChatScreen(),
-      },
-      initialRoute: '/home',
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(
+          create: (context) => TweetProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Twitter',
+        routes: {
+          '/welcome': (context) => const WelcomeScreen(),
+          '/terms': (context) => const TermsScreen(),
+          '/privacyPolicy': (context) => const PrivacyScreen(),
+          '/cookies': (context) => const CookieScreen(),
+          '/signup': (context) => const SignUpScreen(),
+          '/signin': (context) => const SignInScreen(),
+          '/home': (context) => const HomeScreen(),
+          '/profile': (context) => const AnotherProfileScreen(),
+          //'/tweetCard': (context) =>  TweetCard(),
+          '/messageTile': (context) => const MessageTile(),
+          '/tweetScreen': (context) => const TweetScreen(),
+          '/chatScreen': (context) => const ChatScreen(),
+        },
+        initialRoute: '/welcome',
+      ),
     ),
   );
 }

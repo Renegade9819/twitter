@@ -10,7 +10,7 @@ _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
       userName: json['userName'] as String,
       password: json['password'] as String,
       name: json['name'] as String,
-      avatarURL: json['avatarURL'] as String?,
+      avatarURL: json['avatarURL'] as String? ?? null,
       dob: DateTime.parse(json['dob'] as String),
       joinDate: DateTime.parse(json['joinDate'] as String),
     );

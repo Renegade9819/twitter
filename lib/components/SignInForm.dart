@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:twitter/models/user.dart';
+import 'package:twitter/providers/user_provider.dart';
+import 'package:twitter/services/service_locator.dart';
+import 'package:twitter/services/user_service.dart';
 import 'package:twitter/utils/form_util.dart';
 
 class SignInForm extends StatefulWidget {
@@ -9,18 +14,20 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
-  final _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _signInFormKey = GlobalKey<FormState>();
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   FormUtility formUtility = FormUtility();
 
+  UserService userService = serviceLocator<UserService>();
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return Form(
-      key: _formKey,
+      key: _signInFormKey,
       child: Column(
         children: [
           Center(
@@ -58,10 +65,21 @@ class _SignInFormState extends State<SignInForm> {
             height: 50,
             child: ElevatedButton(
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
+                if (_signInFormKey.currentState!.validate()) {
                   String userName = userNameController.text;
                   String password = passwordController.text;
-                  signIn(userName, password);
+                  if (userService.checkCredentials(userName, password)) {
+                    User? user = userService.loginUser(userName, password);
+                    Provider.of<UserProvider>(context, listen: false)
+                        .setLoggedInUser(user!);
+                    Navigator.pushReplacementNamed(context, '/home');
+                  } else {
+                    const snackBar = SnackBar(
+                      content: Text("Wrong Username or Password."),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
                 }
               },
               child: const Text(
@@ -80,6 +98,13 @@ class _SignInFormState extends State<SignInForm> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    userNameController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   void signIn(String userName, String password) {

@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:twitter/models/user.dart';
 import 'package:twitter/navigation_bar_screens/feed_screen.dart';
 import 'package:twitter/navigation_bar_screens/message_screen.dart';
 import 'package:twitter/navigation_bar_screens/notification_screen.dart';
+import 'package:twitter/providers/user_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,26 +15,33 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  User? loggedInUser;
+
   int _selectedIndex = 0;
   static const List<Widget> _pages = <Widget>[
     FeedScreen(),
     NotificationScreen(),
     MessageScreen(),
   ];
+
   @override
   Widget build(BuildContext context) {
+    loggedInUser = Provider.of<UserProvider>(context).loggedInUser;
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         appBar: AppBar(
           leading: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               CircleAvatar(
                 radius: 18,
                 backgroundColor: Colors.white,
-                backgroundImage: NetworkImage(
-                    "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"),
+                backgroundImage: loggedInUser!.avatarURL == null
+                    ? const AssetImage("assets/avatars/default_avatar.png")
+                    : AssetImage(loggedInUser!.avatarURL!),
+                //   backgroundImage: NetworkImage(
+                //       "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"),
               ),
             ],
           ),

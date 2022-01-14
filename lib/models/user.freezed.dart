@@ -26,7 +26,7 @@ class _$UserTearOff {
       {required String userName,
       required String password,
       required String name,
-      String? avatarURL,
+      String? avatarURL = null,
       required DateTime dob,
       required DateTime joinDate}) {
     return _User(
@@ -188,7 +188,7 @@ class _$_User extends _User {
       {required this.userName,
       required this.password,
       required this.name,
-      this.avatarURL,
+      this.avatarURL = null,
       required this.dob,
       required this.joinDate})
       : super._();
@@ -201,6 +201,7 @@ class _$_User extends _User {
   final String password;
   @override
   final String name;
+  @JsonKey()
   @override
   final String? avatarURL;
   @override

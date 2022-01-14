@@ -22,6 +22,7 @@ class UserServiceFakeImpl implements UserService {
     User? user = getUser(userName);
     if (user != null) {
       if (user.userName == userName && user.password == password) {
+        //print(user.userName);
         return user;
       } else {
         return null;

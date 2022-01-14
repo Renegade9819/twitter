@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter/models/user.dart';
+import 'package:twitter/providers/user_provider.dart';
+import 'package:twitter/services/service_locator.dart';
+import 'package:twitter/services/user_service.dart';
 import 'package:twitter/utils/form_util.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -11,9 +15,11 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
-  final _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  DateTime? birthDate;
+  UserService userService = serviceLocator<UserService>();
+
+  DateTime birthDate = DateTime.now();
   String displayDate = "";
 
   TextEditingController userNameController = TextEditingController();
@@ -102,7 +108,17 @@ class _SignUpFormState extends State<SignUpForm> {
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  //
+                  User user = User(
+                    userName: userNameController.text,
+                    password: passwordController.text,
+                    name: nameController.text,
+                    dob: birthDate,
+                    joinDate: DateTime.now(),
+                  );
+                  User? newUser = userService.registerUser(user);
+                  Provider.of<UserProvider>(context, listen: false)
+                      .setLoggedInUser(newUser!);
+                  Navigator.pushReplacementNamed(context, '/home');
                 }
               },
               child: const Text(
@@ -121,11 +137,6 @@ class _SignUpFormState extends State<SignUpForm> {
         ],
       ),
     );
-  }
-
-  void SignUpUser(User user) {
-    // print("${user.userName} ${user.password} ${user.name} ${user.dob}");
-    // userService.registerUser(user);
   }
 
   Future<void> _selectBirthDate(BuildContext context) async {

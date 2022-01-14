@@ -12,7 +12,7 @@ class User with _$User {
     required String userName,
     required String password,
     required String name,
-    String? avatarURL,
+    @Default(null) String? avatarURL,
     required DateTime dob,
     required DateTime joinDate,
   }) = _User;

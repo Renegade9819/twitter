@@ -1,6 +1,11 @@
+import 'package:twitter/services/service_locator.dart';
+import 'package:twitter/services/user_service.dart';
+
 class FormUtility {
+  UserService userService = serviceLocator<UserService>();
+
   RegExp regexUsername = RegExp(r'^[a-zA-Z0-9]+$');
-  RegExp regexName = RegExp(r'^[a-zA-Z]+$');
+  RegExp regexName = RegExp(r'^[a-zA-Z ]+$');
 
   String? validateUserName(String? userName) {
     if (userName!.isEmpty) {
@@ -27,7 +32,7 @@ class FormUtility {
       return "Name cannot be blank";
     }
     if (!regexName.hasMatch(name)) {
-      return "Name can only contain letters";
+      return "Name can only contain letters. e.g. John Doe";
     }
   }
 
@@ -40,6 +45,9 @@ class FormUtility {
   String? loginValidateUsername(String? userName) {
     if (userName!.isEmpty) {
       return "Username cannot be blank";
+    }
+    if (userService.checkIfUserExists(userName) == false) {
+      return "User does not exist";
     }
   }
 
