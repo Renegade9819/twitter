@@ -5,6 +5,7 @@ import 'package:twitter/models/user.dart';
 import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/user_service.dart';
+import 'package:twitter/services/user_service_api.dart';
 import 'package:twitter/utils/form_util.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -28,6 +29,8 @@ class _SignUpFormState extends State<SignUpForm> {
   TextEditingController dateController = TextEditingController();
 
   FormUtility formUtil = FormUtility();
+
+  UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
 
   @override
   void dispose() {
@@ -106,19 +109,17 @@ class _SignUpFormState extends State<SignUpForm> {
             width: screenWidth - 60,
             height: 50,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   User user = User(
-                    userName: userNameController.text,
-                    password: passwordController.text,
+                    userName: userNameController.text.trim(),
+                    password: passwordController.text.trim(),
                     name: nameController.text,
                     dob: birthDate,
                     joinDate: DateTime.now(),
                   );
-                  User? newUser = userService.registerUser(user);
-                  Provider.of<UserProvider>(context, listen: false)
-                      .setLoggedInUser(newUser!);
-                  Navigator.pushReplacementNamed(context, '/home');
+
+                  await validateSignUp(user, context);
                 }
               },
               child: const Text(
@@ -137,6 +138,27 @@ class _SignUpFormState extends State<SignUpForm> {
         ],
       ),
     );
+  }
+
+  Future<void> validateSignUp(User user, BuildContext context) async {
+    bool isRegisterSuccessfull = await userServiceWeb.registerUser(user);
+
+    if (isRegisterSuccessfull) {
+      User newUser = await userServiceWeb.getUser(user.userName);
+
+      print(newUser.toString());
+
+      Provider.of<UserProvider>(context, listen: false)
+          .setLoggedInUser(newUser);
+
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      const snackBar = SnackBar(
+        content: Text("User already exists."),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   Future<void> _selectBirthDate(BuildContext context) async {

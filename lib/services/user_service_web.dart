@@ -1,4 +1,3 @@
-import 'dart:_http';
 import 'dart:convert';
 
 import 'package:twitter/models/user.dart';
@@ -22,11 +21,11 @@ class UserServiceWeb implements UserServiceAPI {
 
   @override
   Future<User> getUser(String userName) async {
-    final response = await http.get(Uri.parse(api + "/user/login/$userName"));
+    final response = await http.get(Uri.parse(api + "/user/$userName"));
     if (response.statusCode == 200) {
       return User.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception("Could not fetch User Details");
+      throw Exception("Error fetching User Details");
     }
   }
 

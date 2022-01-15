@@ -14,6 +14,7 @@ import 'package:twitter/models/user.dart';
 import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/user_service.dart';
+import 'package:twitter/services/user_service_api.dart';
 
 class AnotherProfileScreen extends StatefulWidget {
   const AnotherProfileScreen({
@@ -29,17 +30,27 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
   late TabController tabController;
 
   UserService userService = serviceLocator<UserService>();
+  UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
+
+  late User currentUser;
+
+  @override
+  void initState() {
+    tabController = TabController(length: 3, vsync: this);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    String userName = ModalRoute.of(context)!.settings.arguments as String;
-    User? loggedInUser = Provider.of<UserProvider>(context).loggedInUser;
-    User? currentUser = userService.getUser(userName);
+    User user = ModalRoute.of(context)!.settings.arguments as User;
+    User loggedInUser = Provider.of<UserProvider>(context).loggedInUser;
     bool isLoggedInUser;
 
-    if (loggedInUser!.userName == currentUser!.userName) {
+    if (loggedInUser.userName == user.userName) {
+      currentUser = loggedInUser;
       isLoggedInUser = true;
     } else {
+      currentUser = user;
       isLoggedInUser = false;
     }
     return Scaffold(
@@ -216,12 +227,6 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
         ]),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    tabController = TabController(length: 3, vsync: this);
-    super.initState();
   }
 
   @override

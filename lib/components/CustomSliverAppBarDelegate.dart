@@ -40,13 +40,20 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return Opacity(
       opacity: appear(shrinkOffset),
       child: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.black,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Profile'),
+        title: const Text(
+          'Profile',
+          style: TextStyle(color: Colors.black),
+        ),
       ),
     );
   }
@@ -70,7 +77,8 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
             fit: BoxFit.cover,
           ),
           Positioned(
-            top: 10,
+            top: 26,
+            left: 3,
             child: shrinkOffset * 0.7 > 40
                 ? const SizedBox.shrink()
                 : IconButton(
@@ -89,7 +97,7 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   Widget buildAvatar(double shrinkOffset, String? avatarURL) {
     ImageProvider imageWidget;
     if (avatarURL == null) {
-      imageWidget = const AssetImage("assets/images/default_avatar.png");
+      imageWidget = const AssetImage("assets/avatars/default_avatar.png");
     } else {
       imageWidget = AssetImage(avatarURL);
     }

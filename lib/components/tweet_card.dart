@@ -34,7 +34,7 @@ class _TweetCardState extends State<TweetCard> {
           children: <Widget>[
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, '/profile',
-                  arguments: tweetUser!.userName),
+                  arguments: tweetUser!),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
                 child: CircleAvatar(

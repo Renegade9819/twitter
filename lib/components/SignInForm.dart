@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:twitter/models/user.dart';
 import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/services/service_locator.dart';
-import 'package:twitter/services/user_service.dart';
+import 'package:twitter/services/user_service_api.dart';
 import 'package:twitter/utils/form_util.dart';
 
 class SignInForm extends StatefulWidget {
@@ -21,7 +21,7 @@ class _SignInFormState extends State<SignInForm> {
 
   FormUtility formUtility = FormUtility();
 
-  UserService userService = serviceLocator<UserService>();
+  UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
 
   @override
   Widget build(BuildContext context) {
@@ -64,22 +64,12 @@ class _SignInFormState extends State<SignInForm> {
             width: screenWidth - 60,
             height: 50,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_signInFormKey.currentState!.validate()) {
                   String userName = userNameController.text;
                   String password = passwordController.text;
-                  if (userService.checkCredentials(userName, password)) {
-                    User? user = userService.loginUser(userName, password);
-                    Provider.of<UserProvider>(context, listen: false)
-                        .setLoggedInUser(user!);
-                    Navigator.pushReplacementNamed(context, '/home');
-                  } else {
-                    const snackBar = SnackBar(
-                      content: Text("Wrong Username or Password."),
-                    );
 
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
+                  await validateLogin(userName, password, context);
                 }
               },
               child: const Text(
@@ -100,14 +90,36 @@ class _SignInFormState extends State<SignInForm> {
     );
   }
 
+  Future<void> validateLogin(
+      String userName, String password, BuildContext context) async {
+    bool ifExists = await userServiceWeb.checkIfUserExists(userName);
+
+    if (ifExists) {
+      bool isCorrect = await userServiceWeb.loginUser(userName, password);
+      if (isCorrect) {
+        User user = await userServiceWeb.getUser(userName);
+        Provider.of<UserProvider>(context, listen: false).setLoggedInUser(user);
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        const snackBar = SnackBar(
+          content: Text("Wrong Username or Password."),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } else {
+      const snackBar = SnackBar(
+        content: Text("User does not exist."),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
   @override
   void dispose() {
     userNameController.dispose();
     passwordController.dispose();
     super.dispose();
-  }
-
-  void signIn(String userName, String password) {
-    print(userName + ' ' + password);
   }
 }

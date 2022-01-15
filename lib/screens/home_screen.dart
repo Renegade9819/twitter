@@ -6,6 +6,8 @@ import 'package:twitter/navigation_bar_screens/feed_screen.dart';
 import 'package:twitter/navigation_bar_screens/message_screen.dart';
 import 'package:twitter/navigation_bar_screens/notification_screen.dart';
 import 'package:twitter/providers/user_provider.dart';
+import 'package:twitter/services/service_locator.dart';
+import 'package:twitter/services/user_service_api.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,7 +17,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  User? loggedInUser;
+  late User loggedInUser;
+
+  UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
 
   int _selectedIndex = 0;
   static const List<Widget> _pages = <Widget>[
@@ -36,13 +40,13 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/profile',
-                    arguments: loggedInUser!.userName),
+                    arguments: loggedInUser),
                 child: CircleAvatar(
                   radius: 18,
                   backgroundColor: Colors.white,
-                  backgroundImage: loggedInUser!.avatarURL == null
+                  backgroundImage: loggedInUser.avatarURL == null
                       ? const AssetImage("assets/avatars/default_avatar.png")
-                      : AssetImage(loggedInUser!.avatarURL!),
+                      : AssetImage(loggedInUser.avatarURL!),
                   //   backgroundImage: NetworkImage(
                   //       "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"),
                 ),

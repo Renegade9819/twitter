@@ -24,7 +24,7 @@ class _$UserTearOff {
 
   _User call(
       {required String userName,
-      required String password,
+      required String? password,
       required String name,
       String? avatarURL = null,
       required DateTime dob,
@@ -50,7 +50,7 @@ const $User = _$UserTearOff();
 /// @nodoc
 mixin _$User {
   String get userName => throw _privateConstructorUsedError;
-  String get password => throw _privateConstructorUsedError;
+  String? get password => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String? get avatarURL => throw _privateConstructorUsedError;
   DateTime get dob => throw _privateConstructorUsedError;
@@ -67,7 +67,7 @@ abstract class $UserCopyWith<$Res> {
       _$UserCopyWithImpl<$Res>;
   $Res call(
       {String userName,
-      String password,
+      String? password,
       String name,
       String? avatarURL,
       DateTime dob,
@@ -99,7 +99,7 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
       password: password == freezed
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -127,7 +127,7 @@ abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   @override
   $Res call(
       {String userName,
-      String password,
+      String? password,
       String name,
       String? avatarURL,
       DateTime dob,
@@ -160,7 +160,7 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
       password: password == freezed
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -198,7 +198,7 @@ class _$_User extends _User {
   @override
   final String userName;
   @override
-  final String password;
+  final String? password;
   @override
   final String name;
   @JsonKey()
@@ -251,7 +251,7 @@ class _$_User extends _User {
 abstract class _User extends User {
   factory _User(
       {required String userName,
-      required String password,
+      required String? password,
       required String name,
       String? avatarURL,
       required DateTime dob,
@@ -263,7 +263,7 @@ abstract class _User extends User {
   @override
   String get userName;
   @override
-  String get password;
+  String? get password;
   @override
   String get name;
   @override

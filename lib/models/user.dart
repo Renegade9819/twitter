@@ -10,7 +10,7 @@ class User with _$User {
 
   factory User({
     required String userName,
-    required String password,
+    required String? password,
     required String name,
     @Default(null) String? avatarURL,
     required DateTime dob,

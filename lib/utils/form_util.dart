@@ -1,5 +1,7 @@
+import 'package:twitter/models/user.dart';
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/user_service.dart';
+import 'package:twitter/services/user_service_api.dart';
 
 class FormUtility {
   UserService userService = serviceLocator<UserService>();
@@ -45,9 +47,6 @@ class FormUtility {
   String? loginValidateUsername(String? userName) {
     if (userName!.isEmpty) {
       return "Username cannot be blank";
-    }
-    if (userService.checkIfUserExists(userName) == false) {
-      return "User does not exist";
     }
   }
 
