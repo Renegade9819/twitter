@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/profile',
-                    arguments: loggedInUser!.userName),
+                    arguments: loggedInUser!),
                 child: CircleAvatar(
                   radius: 18,
                   backgroundColor: Colors.white,
