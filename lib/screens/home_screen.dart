@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:twitter/components/expandable_fab.dart';
 import 'package:twitter/models/user.dart';
 import 'package:twitter/navigation_bar_screens/feed_screen.dart';
 import 'package:twitter/navigation_bar_screens/message_screen.dart';
@@ -109,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  FloatingActionButton buildFAB(int index) {
+  Widget buildFAB(int index) {
     if (index == 2) {
       return FloatingActionButton(
         backgroundColor: Colors.blue,
@@ -120,15 +121,28 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     } else {
-      return FloatingActionButton(
-        backgroundColor: Colors.blue,
-        onPressed: () {
-          Navigator.pushNamed(context, '/tweetScreen');
-        },
-        child: const Icon(
-          Icons.auto_awesome,
-          color: Colors.white,
-        ),
+      return ExpandableFAB(
+        distance: 112.0,
+        children: [
+          ActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/tweetScreen');
+            },
+            icon: const Icon(
+              Icons.create,
+              color: Colors.white,
+            ),
+          ),
+          ActionButton(
+            onPressed: () {
+              //Navigator.pushNamed(context, '/tweetScreen');
+            },
+            icon: const Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+          ),
+        ],
       );
     }
   }

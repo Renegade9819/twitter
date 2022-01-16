@@ -7,6 +7,7 @@ import 'package:twitter/screens/another_profile_screen.dart';
 import 'package:twitter/screens/chat_screen.dart';
 import 'package:twitter/screens/edit_profile_screen.dart';
 import 'package:twitter/screens/home_screen.dart';
+import 'package:twitter/screens/search_users.dart';
 import 'package:twitter/screens/signin_screen.dart';
 import 'package:twitter/screens/signup_screen.dart';
 import 'package:twitter/screens/tweet_screen.dart';
@@ -39,6 +40,7 @@ void main() {
           '/home': (context) => const HomeScreen(),
           '/profile': (context) => const AnotherProfileScreen(),
           //'/tweetCard': (context) =>  TweetCard(),
+          '/searchUsers': (context) => const SearchUsers(),
           '/messageTile': (context) => const MessageTile(),
           '/tweetScreen': (context) => const TweetScreen(),
           '/chatScreen': (context) => const ChatScreen(),

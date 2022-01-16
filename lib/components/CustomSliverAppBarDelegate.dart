@@ -77,8 +77,8 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
             fit: BoxFit.cover,
           ),
           Positioned(
-            top: 26,
-            left: 3,
+            top: 28,
+            left: 4,
             child: shrinkOffset * 0.7 > 40
                 ? const SizedBox.shrink()
                 : IconButton(
