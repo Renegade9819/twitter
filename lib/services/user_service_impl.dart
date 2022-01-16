@@ -53,6 +53,11 @@ class UserServiceFakeImpl implements UserService {
   }
 
   @override
+  Set<User> getAllUsers() {
+    return dataStore.users;
+  }
+
+  @override
   bool checkIfUserExists(String userName) {
     User? user = getUser(userName);
     return user != null;

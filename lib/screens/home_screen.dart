@@ -6,6 +6,7 @@ import 'package:twitter/navigation_bar_screens/feed_screen.dart';
 import 'package:twitter/navigation_bar_screens/message_screen.dart';
 import 'package:twitter/navigation_bar_screens/notification_screen.dart';
 import 'package:twitter/providers/user_provider.dart';
+import 'package:twitter/screens/search_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -117,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     } else {
       return ExpandableFAB(
-        distance: 112.0,
+        distance: 66.0,
         children: [
           ActionButton(
             onPressed: () {
@@ -130,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           ActionButton(
             onPressed: () {
-              //Navigator.pushNamed(context, '/tweetScreen');
+              showSearch(context: context, delegate: SearchUsers());
             },
             icon: const Icon(
               Icons.search,
@@ -139,16 +140,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       );
-      // return FloatingActionButton(
-      //   backgroundColor: Colors.blue,
-      //   onPressed: () {
-      //     Navigator.pushNamed(context, '/tweetScreen');
-      //   },
-      //   child: const Icon(
-      //     Icons.auto_awesome,
-      //     color: Colors.white,
-      //   ),
-      // );
     }
   }
 

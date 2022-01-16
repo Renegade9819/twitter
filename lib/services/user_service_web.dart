@@ -72,4 +72,17 @@ class UserServiceWeb implements UserServiceAPI {
       throw Exception("Could not update User Details");
     }
   }
+
+  @override
+  Future<List<User>> getUserBySearchTerm(String searchTerm) async {
+    List<User> searchResults;
+    final response =
+        await http.get(Uri.parse(api + "/user/search/$searchTerm"));
+
+    Iterable results = jsonDecode(response.body);
+    searchResults =
+        List<User>.from(results.map((model) => User.fromJson(model)));
+
+    return searchResults;
+  }
 }
