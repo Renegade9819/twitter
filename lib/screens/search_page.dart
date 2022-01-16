@@ -5,15 +5,7 @@ import 'package:twitter/services/user_service.dart';
 import 'package:twitter/services/user_service_api.dart';
 
 class SearchUsers extends SearchDelegate<String> {
-  UserService userService = serviceLocator<UserService>();
   UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
-
-  List<User> userList = [];
-  List<User> recentUsers = [];
-
-  SearchUsers() {
-    userList = userService.getAllUsers().toList();
-  }
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -57,28 +49,14 @@ class SearchUsers extends SearchDelegate<String> {
               child: CircularProgressIndicator(),
             );
           default:
-            return buildSuggestionsSuccess(snapshot.data!);
+            if (snapshot.hasError || snapshot.data!.isEmpty) {
+              return buildNoSuggestions();
+            } else {
+              return buildSuggestionsSuccess(snapshot.data!);
+            }
         }
       },
     );
-    // final suggestions = query.isEmpty
-    //     ? recentUsers
-    //     : userList.where((user) {
-    //         final nameLower = user.name.toLowerCase();
-    //         final queryLower = query.toLowerCase();
-
-    //         final userNameLower = user.userName.toLowerCase();
-
-    //         if (nameLower.contains(queryLower)) {
-    //           return true;
-    //         } else if (userNameLower.contains(queryLower)) {
-    //           return true;
-    //         } else {
-    //           return false;
-    //         }
-    //       }).toList();
-
-    // return buildSuggestionsSuccess(suggestions);
   }
 
   Widget buildNoSuggestions() {
