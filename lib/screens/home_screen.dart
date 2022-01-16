@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter/components/expandable_fab.dart';
@@ -7,8 +6,6 @@ import 'package:twitter/navigation_bar_screens/feed_screen.dart';
 import 'package:twitter/navigation_bar_screens/message_screen.dart';
 import 'package:twitter/navigation_bar_screens/notification_screen.dart';
 import 'package:twitter/providers/user_provider.dart';
-import 'package:twitter/services/service_locator.dart';
-import 'package:twitter/services/user_service_api.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -18,19 +15,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late User loggedInUser;
-
-  UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
+  User? loggedInUser;
 
   int _selectedIndex = 0;
-  static const List<Widget> _pages = <Widget>[
-    FeedScreen(),
-    NotificationScreen(),
-    MessageScreen(),
-  ];
 
   @override
   Widget build(BuildContext context) {
+    const List<Widget> _pages = <Widget>[
+      FeedScreen(),
+      NotificationScreen(),
+      MessageScreen(),
+    ];
     loggedInUser = Provider.of<UserProvider>(context).loggedInUser;
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -41,13 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/profile',
-                    arguments: loggedInUser),
+                    arguments: loggedInUser!.userName),
                 child: CircleAvatar(
                   radius: 18,
                   backgroundColor: Colors.white,
-                  backgroundImage: loggedInUser.avatarURL == null
+                  backgroundImage: loggedInUser!.avatarURL == null
                       ? const AssetImage("assets/avatars/default_avatar.png")
-                      : AssetImage(loggedInUser.avatarURL!),
+                      : AssetImage(loggedInUser!.avatarURL!),
                   //   backgroundImage: NetworkImage(
                   //       "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"),
                 ),
@@ -144,6 +139,16 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       );
+      // return FloatingActionButton(
+      //   backgroundColor: Colors.blue,
+      //   onPressed: () {
+      //     Navigator.pushNamed(context, '/tweetScreen');
+      //   },
+      //   child: const Icon(
+      //     Icons.auto_awesome,
+      //     color: Colors.white,
+      //   ),
+      // );
     }
   }
 
