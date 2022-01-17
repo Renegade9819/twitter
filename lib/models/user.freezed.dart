@@ -27,6 +27,8 @@ class _$UserTearOff {
       required String? password,
       required String name,
       String? avatarURL = null,
+      int? avatarId = null,
+      int? bgId = null,
       required DateTime dob,
       required DateTime joinDate}) {
     return _User(
@@ -34,6 +36,8 @@ class _$UserTearOff {
       password: password,
       name: name,
       avatarURL: avatarURL,
+      avatarId: avatarId,
+      bgId: bgId,
       dob: dob,
       joinDate: joinDate,
     );
@@ -53,6 +57,8 @@ mixin _$User {
   String? get password => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String? get avatarURL => throw _privateConstructorUsedError;
+  int? get avatarId => throw _privateConstructorUsedError;
+  int? get bgId => throw _privateConstructorUsedError;
   DateTime get dob => throw _privateConstructorUsedError;
   DateTime get joinDate => throw _privateConstructorUsedError;
 
@@ -70,6 +76,8 @@ abstract class $UserCopyWith<$Res> {
       String? password,
       String name,
       String? avatarURL,
+      int? avatarId,
+      int? bgId,
       DateTime dob,
       DateTime joinDate});
 }
@@ -88,6 +96,8 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
     Object? password = freezed,
     Object? name = freezed,
     Object? avatarURL = freezed,
+    Object? avatarId = freezed,
+    Object? bgId = freezed,
     Object? dob = freezed,
     Object? joinDate = freezed,
   }) {
@@ -108,6 +118,14 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
           ? _value.avatarURL
           : avatarURL // ignore: cast_nullable_to_non_nullable
               as String?,
+      avatarId: avatarId == freezed
+          ? _value.avatarId
+          : avatarId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      bgId: bgId == freezed
+          ? _value.bgId
+          : bgId // ignore: cast_nullable_to_non_nullable
+              as int?,
       dob: dob == freezed
           ? _value.dob
           : dob // ignore: cast_nullable_to_non_nullable
@@ -130,6 +148,8 @@ abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       String? password,
       String name,
       String? avatarURL,
+      int? avatarId,
+      int? bgId,
       DateTime dob,
       DateTime joinDate});
 }
@@ -149,6 +169,8 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
     Object? password = freezed,
     Object? name = freezed,
     Object? avatarURL = freezed,
+    Object? avatarId = freezed,
+    Object? bgId = freezed,
     Object? dob = freezed,
     Object? joinDate = freezed,
   }) {
@@ -169,6 +191,14 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
           ? _value.avatarURL
           : avatarURL // ignore: cast_nullable_to_non_nullable
               as String?,
+      avatarId: avatarId == freezed
+          ? _value.avatarId
+          : avatarId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      bgId: bgId == freezed
+          ? _value.bgId
+          : bgId // ignore: cast_nullable_to_non_nullable
+              as int?,
       dob: dob == freezed
           ? _value.dob
           : dob // ignore: cast_nullable_to_non_nullable
@@ -189,6 +219,8 @@ class _$_User extends _User {
       required this.password,
       required this.name,
       this.avatarURL = null,
+      this.avatarId = null,
+      this.bgId = null,
       required this.dob,
       required this.joinDate})
       : super._();
@@ -204,6 +236,12 @@ class _$_User extends _User {
   @JsonKey()
   @override
   final String? avatarURL;
+  @JsonKey()
+  @override
+  final int? avatarId;
+  @JsonKey()
+  @override
+  final int? bgId;
   @override
   final DateTime dob;
   @override
@@ -211,7 +249,7 @@ class _$_User extends _User {
 
   @override
   String toString() {
-    return 'User(userName: $userName, password: $password, name: $name, avatarURL: $avatarURL, dob: $dob, joinDate: $joinDate)';
+    return 'User(userName: $userName, password: $password, name: $name, avatarURL: $avatarURL, avatarId: $avatarId, bgId: $bgId, dob: $dob, joinDate: $joinDate)';
   }
 
   @override
@@ -223,6 +261,8 @@ class _$_User extends _User {
             const DeepCollectionEquality().equals(other.password, password) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.avatarURL, avatarURL) &&
+            const DeepCollectionEquality().equals(other.avatarId, avatarId) &&
+            const DeepCollectionEquality().equals(other.bgId, bgId) &&
             const DeepCollectionEquality().equals(other.dob, dob) &&
             const DeepCollectionEquality().equals(other.joinDate, joinDate));
   }
@@ -234,6 +274,8 @@ class _$_User extends _User {
       const DeepCollectionEquality().hash(password),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(avatarURL),
+      const DeepCollectionEquality().hash(avatarId),
+      const DeepCollectionEquality().hash(bgId),
       const DeepCollectionEquality().hash(dob),
       const DeepCollectionEquality().hash(joinDate));
 
@@ -254,6 +296,8 @@ abstract class _User extends User {
       required String? password,
       required String name,
       String? avatarURL,
+      int? avatarId,
+      int? bgId,
       required DateTime dob,
       required DateTime joinDate}) = _$_User;
   _User._() : super._();
@@ -268,6 +312,10 @@ abstract class _User extends User {
   String get name;
   @override
   String? get avatarURL;
+  @override
+  int? get avatarId;
+  @override
+  int? get bgId;
   @override
   DateTime get dob;
   @override

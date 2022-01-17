@@ -13,6 +13,8 @@ class User with _$User {
     required String? password,
     required String name,
     @Default(null) String? avatarURL,
+    @Default(null) int? avatarId,
+    @Default(null) int? bgId,
     required DateTime dob,
     required DateTime joinDate,
   }) = _User;

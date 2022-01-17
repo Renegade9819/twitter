@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:twitter/models/user.dart';
 
@@ -44,9 +45,7 @@ class UserServiceWeb implements UserServiceAPI {
   Future<bool> registerUser(User user) async {
     final response = await http.post(
       Uri.parse(api + "/user/signup"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       body: jsonEncode(user),
     );
     if (response.statusCode == 200) {
@@ -60,11 +59,11 @@ class UserServiceWeb implements UserServiceAPI {
   Future<User> updateUser(User user) async {
     final response = await http.put(
       Uri.parse(api + "/user/profile/update"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       body: jsonEncode(user),
     );
+
+    print("update called");
 
     if (response.statusCode == 200) {
       return User.fromJson(jsonDecode(response.body));

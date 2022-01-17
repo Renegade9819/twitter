@@ -1,7 +1,5 @@
-import 'package:twitter/models/user.dart';
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/user_service.dart';
-import 'package:twitter/services/user_service_api.dart';
 
 class FormUtility {
   UserService userService = serviceLocator<UserService>();

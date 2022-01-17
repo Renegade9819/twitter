@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 
 class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
-  final String? avatarURL;
+  final int? avatarId;
+  final int? bgId;
   const CustomSliverAppBarDelegate(
-      {required this.expandedHeight, required this.avatarURL});
+      {required this.expandedHeight,
+      required this.avatarId,
+      required this.bgId});
 
   @override
   Widget build(
@@ -15,12 +18,12 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
       fit: StackFit.expand,
       clipBehavior: Clip.none,
       children: [
-        buildBackground(shrinkOffset, context),
+        buildBackground(shrinkOffset, bgId, context),
         buildAppBar(shrinkOffset, context),
         Positioned(
           top: top,
           left: 15,
-          child: buildAvatar(shrinkOffset, avatarURL),
+          child: buildAvatar(shrinkOffset, avatarId, null),
         )
       ],
     );
@@ -66,14 +69,16 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return 1 - shrinkOffset / expandedHeight;
   }
 
-  Widget buildBackground(double shrinkOffset, context) {
+  Widget buildBackground(double shrinkOffset, int? bgId, context) {
     return Opacity(
       opacity: disappear(shrinkOffset),
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
-            "https://images.unsplash.com/photo-1640100921996-8798b85703c3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=894&q=80",
+          Image(
+            image: bgId != null
+                ? AssetImage("$bgId")
+                : const AssetImage("assets/bg/Light_blue.png"),
             fit: BoxFit.cover,
           ),
           Positioned(
@@ -94,7 +99,7 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget buildAvatar(double shrinkOffset, String? avatarURL) {
+  Widget buildAvatar(double shrinkOffset, int? avatarId, String? avatarURL) {
     ImageProvider imageWidget;
     if (avatarURL == null) {
       imageWidget = const AssetImage("assets/avatars/default_avatar.png");

@@ -60,7 +60,10 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
           return [
             SliverPersistentHeader(
               delegate: CustomSliverAppBarDelegate(
-                  expandedHeight: 200, avatarURL: currentUser.avatarURL),
+                expandedHeight: 200,
+                avatarId: currentUser.avatarId,
+                bgId: currentUser.bgId,
+              ),
               pinned: true,
             ),
             SliverList(
