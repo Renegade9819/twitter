@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +35,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   GlobalKey<FormState> _editFormKey = GlobalKey<FormState>();
 
   User? user;
+  bool isAvatarPicked = false;
+  bool isBgPicked = false;
+  late PlatformFile avatarFile;
+  late PlatformFile bgFile;
 
   @override
   void initState() {
@@ -184,15 +192,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Widget buildBackground(int? bgId) {
     return GestureDetector(
-      onTap: () => print("background tapped"),
+      onTap: () async {
+        FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+        );
+
+        if (result != null) {
+          bgFile = result.files.single;
+          setState(() {
+            isBgPicked = true;
+          });
+        }
+      },
       child: Stack(
         fit: StackFit.expand,
         clipBehavior: Clip.none,
         children: <Widget>[
           Image(
-            image: bgId != null
-                ? AssetImage("$bgId")
-                : const AssetImage("assets/bg/Light_blue.png"),
+            image: getBg(bgId),
             fit: BoxFit.cover,
           ),
           Container(
@@ -209,8 +226,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Widget buildAvatar(int? avatarId) {
+    avatarId = null;
     return GestureDetector(
-      onTap: () => print("avatar tapped"),
+      onTap: () async {
+        FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+        );
+
+        if (result != null) {
+          avatarFile = result.files.single;
+          setState(() {
+            isAvatarPicked = true;
+          });
+        }
+      },
+      // avatarId != null
+      //             ? AssetImage("$avatarId")
+      //             : const AssetImage("assets/avatars/default_avatar.png"),
       child: Stack(
         children: [
           CircleAvatar(
@@ -219,9 +251,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: CircleAvatar(
               backgroundColor: Colors.transparent,
               minRadius: 39,
-              backgroundImage: avatarId != null
-                  ? AssetImage("$avatarId")
-                  : const AssetImage("assets/avatars/default_avatar.png"),
+              backgroundImage: getAvatar(avatarId),
             ),
           ),
           const CircleAvatar(
@@ -236,6 +266,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ],
       ),
     );
+  }
+
+  ImageProvider<Object> getAvatar(int? avatarId) {
+    if (avatarId != null) {
+      return AssetImage("$avatarId");
+    } else if (isAvatarPicked) {
+      return FileImage(File(avatarFile.path!));
+    } else {
+      return const AssetImage("assets/avatars/default_avatar.png");
+    }
+  }
+
+  ImageProvider<Object> getBg(int? bgId) {
+    if (bgId != null) {
+      return AssetImage("$bgId");
+    } else if (isBgPicked) {
+      return FileImage(File(bgFile.path!));
+    } else {
+      return const AssetImage("assets/bg/Light_blue.png");
+    }
   }
 
   Future<void> _selectBirthDate(BuildContext context) async {
