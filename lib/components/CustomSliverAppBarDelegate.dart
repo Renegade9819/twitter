@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twitter/api/api_constants.dart' as api;
 
 class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
@@ -23,7 +24,7 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
         Positioned(
           top: top,
           left: 15,
-          child: buildAvatar(shrinkOffset, avatarId, null),
+          child: buildAvatar(shrinkOffset, avatarId),
         )
       ],
     );
@@ -70,19 +71,23 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   Widget buildBackground(double shrinkOffset, int? bgId, context) {
+    ImageProvider imageWidget;
+    if (bgId == null) {
+      imageWidget = const AssetImage("assets/bg/Light_blue.png");
+    } else {
+      imageWidget = NetworkImage(api.bgUrl + "$bgId");
+    }
     return Opacity(
       opacity: disappear(shrinkOffset),
       child: Stack(
         fit: StackFit.expand,
         children: [
           Image(
-            image: bgId != null
-                ? AssetImage("$bgId")
-                : const AssetImage("assets/bg/Light_blue.png"),
+            image: imageWidget,
             fit: BoxFit.cover,
           ),
           Positioned(
-            top: 28,
+            top: 3,
             left: 4,
             child: shrinkOffset * 0.7 > 40
                 ? const SizedBox.shrink()
@@ -99,12 +104,12 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget buildAvatar(double shrinkOffset, int? avatarId, String? avatarURL) {
+  Widget buildAvatar(double shrinkOffset, int? avatarId) {
     ImageProvider imageWidget;
-    if (avatarURL == null) {
+    if (avatarId == null) {
       imageWidget = const AssetImage("assets/avatars/default_avatar.png");
     } else {
-      imageWidget = AssetImage(avatarURL);
+      imageWidget = NetworkImage(api.avatarUrl + "$avatarId");
     }
     return Opacity(
       opacity: disappear(shrinkOffset),

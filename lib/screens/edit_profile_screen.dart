@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/user_service_api.dart';
 import 'package:twitter/utils/form_util.dart';
+import 'package:twitter/api/api_constants.dart' as api;
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -89,7 +89,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   if (_editFormKey.currentState!.validate()) {
                     String updatedName = nameController.text.trim();
                     DateTime updatedBday = updatedBirthDate ?? birthDate;
-                    if (user!.name != updatedName || birthDate != updatedBday) {
+                    bool isAvatarUploaded;
+                    bool isBgUploaded;
+                    if (isUserFieldChanged(updatedName, updatedBday)) {
                       User updatedUser = await userServiceWeb.updateUser(
                         user!.copyWith(
                           name: updatedName,
@@ -98,10 +100,37 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       );
                       Provider.of<UserProvider>(context, listen: false)
                           .updateLoggedInUser(updatedUser);
-                      Navigator.pop(context);
-                    } else {
-                      Navigator.pop(context);
                     }
+                    if (isAvatarPicked) {
+                      isAvatarUploaded = await userServiceWeb.uploadUserAvatar(
+                          File(avatarFile.path!), user!.userName);
+
+                      if (isAvatarUploaded) {
+                        print("avatar uploaded");
+                        User updatedUser =
+                            await userServiceWeb.getUser(user!.userName);
+                        Provider.of<UserProvider>(context, listen: false)
+                            .updateLoggedInUser(updatedUser);
+                      } else {
+                        print("problem uploading avatar");
+                      }
+                    }
+
+                    if (isBgPicked) {
+                      isBgUploaded = await userServiceWeb.uploadUserBackground(
+                          File(bgFile.path!), user!.userName);
+
+                      if (isBgUploaded) {
+                        print("background uploaded");
+                        User updatedUser =
+                            await userServiceWeb.getUser(user!.userName);
+                        Provider.of<UserProvider>(context, listen: false)
+                            .updateLoggedInUser(updatedUser);
+                      } else {
+                        print("problem uploading background");
+                      }
+                    }
+                    Navigator.pop(context);
                   }
                 },
                 child: const Text(
@@ -123,7 +152,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Column(
             children: <Widget>[
               Container(
-                child: buildUserImages(deviceSize, user!),
+                child: buildUserImages(deviceSize),
               ),
               const SizedBox(height: 40),
               Form(
@@ -170,9 +199,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget buildUserImages(Size deviceSize, User user) {
-    int? avatarId = user.avatarId;
-    int? bgId = user.bgId;
+  bool isUserFieldChanged(String updatedName, DateTime updatedBday) {
+    if (user!.name != updatedName || birthDate != updatedBday) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Widget buildUserImages(Size deviceSize) {
+    int? avatarId = user!.avatarId;
+    int? bgId = user!.bgId;
     return SizedBox(
       height: deviceSize.height * 0.2,
       child: Stack(
@@ -240,9 +277,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           });
         }
       },
-      // avatarId != null
-      //             ? AssetImage("$avatarId")
-      //             : const AssetImage("assets/avatars/default_avatar.png"),
       child: Stack(
         children: [
           CircleAvatar(
@@ -251,7 +285,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: CircleAvatar(
               backgroundColor: Colors.transparent,
               minRadius: 39,
-              backgroundImage: getAvatar(avatarId),
+              backgroundImage: getAvatar(),
             ),
           ),
           const CircleAvatar(
@@ -268,21 +302,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  ImageProvider<Object> getAvatar(int? avatarId) {
-    if (avatarId != null) {
-      return AssetImage("$avatarId");
-    } else if (isAvatarPicked) {
+  ImageProvider<Object> getAvatar() {
+    int? avatarId = user!.avatarId;
+    if (isAvatarPicked) {
       return FileImage(File(avatarFile.path!));
+    } else if (avatarId != null) {
+      return NetworkImage(api.avatarUrl + "$avatarId");
     } else {
       return const AssetImage("assets/avatars/default_avatar.png");
     }
   }
 
   ImageProvider<Object> getBg(int? bgId) {
-    if (bgId != null) {
-      return AssetImage("$bgId");
-    } else if (isBgPicked) {
+    int? bgId = user!.bgId;
+    if (isBgPicked) {
       return FileImage(File(bgFile.path!));
+    } else if (bgId != null) {
+      return NetworkImage(api.bgUrl + "$bgId");
     } else {
       return const AssetImage("assets/bg/Light_blue.png");
     }

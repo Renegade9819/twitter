@@ -7,6 +7,7 @@ import 'package:twitter/navigation_bar_screens/message_screen.dart';
 import 'package:twitter/navigation_bar_screens/notification_screen.dart';
 import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/screens/search_page.dart';
+import 'package:twitter/api/api_constants.dart' as api;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -28,6 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
       MessageScreen(),
     ];
     loggedInUser = Provider.of<UserProvider>(context).loggedInUser;
+    int? avatarId = loggedInUser!.avatarId;
+    int? bgId = loggedInUser!.bgId;
+    ImageProvider avatarImageWidget;
+    if (avatarId == null) {
+      avatarImageWidget = const AssetImage("assets/avatars/default_avatar.png");
+    } else {
+      avatarImageWidget = NetworkImage(api.avatarUrl + "$avatarId");
+    }
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
@@ -41,9 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: CircleAvatar(
                   radius: 18,
                   backgroundColor: Colors.white,
-                  backgroundImage: loggedInUser!.avatarURL == null
-                      ? const AssetImage("assets/avatars/default_avatar.png")
-                      : AssetImage(loggedInUser!.avatarURL!),
+                  backgroundImage: avatarImageWidget,
                   //   backgroundImage: NetworkImage(
                   //       "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"),
                 ),
