@@ -105,7 +105,9 @@ class _TweetCardState extends State<TweetCard> {
                                   overflow: TextOverflow.visible,
                                 ),
                                 tweet.containsMedia
-                                    ? buildMedia(tweet.mediaId!, context)
+                                    ? Center(
+                                        child:
+                                            buildMedia(tweet.mediaId!, context))
                                     : Container(),
                                 const SizedBox(height: 10),
                                 Row(

@@ -12,6 +12,7 @@ class TweetProvider with ChangeNotifier {
   Map<int, Tweet> userMediaTweets = {};
 
   Future<void> updateLatestTweetList(List<Tweet> updatedTweets) async {
+    allTweets = {};
     for (var tweet in updatedTweets) {
       allTweets[tweet.tweetId!] = tweet;
     }
@@ -19,6 +20,7 @@ class TweetProvider with ChangeNotifier {
   }
 
   Future<void> updateUserTweetsList(List<Tweet> updatedUserTweets) async {
+    userTweets = {};
     for (var tweet in updatedUserTweets) {
       userTweets[tweet.tweetId!] = tweet;
     }
@@ -26,6 +28,7 @@ class TweetProvider with ChangeNotifier {
   }
 
   Future<void> updateUserLikedTweetsList(List<Tweet> updatedLikedTweets) async {
+    likedTweets = {};
     for (var tweet in updatedLikedTweets) {
       likedTweets[tweet.tweetId!] = tweet;
     }
@@ -33,6 +36,7 @@ class TweetProvider with ChangeNotifier {
   }
 
   Future<void> updateUserMediaTweetList(List<Tweet> updatedMediaTweets) async {
+    userMediaTweets = {};
     for (var tweet in updatedMediaTweets) {
       userMediaTweets[tweet.tweetId!] = tweet;
     }

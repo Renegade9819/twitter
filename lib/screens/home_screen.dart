@@ -173,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
         fillColor: Colors.grey[200],
         filled: true,
         isDense: true,
-        contentPadding: EdgeInsets.all(10),
+        contentPadding: const EdgeInsets.all(10),
       ),
     );
   }

@@ -10,9 +10,12 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter/components/CustomSliverAppBarDelegate.dart';
 import 'package:twitter/components/tweet_card.dart';
+import 'package:twitter/models/tweet.dart';
 import 'package:twitter/models/user.dart';
+import 'package:twitter/providers/tweet_provider_new.dart';
 import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/services/service_locator.dart';
+import 'package:twitter/services/tweet_service_api.dart';
 import 'package:twitter/services/user_service.dart';
 import 'package:twitter/services/user_service_api.dart';
 
@@ -29,10 +32,12 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
 
-  UserService userService = serviceLocator<UserService>();
   UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
+  final TweetServiceAPI tweetServiceWeb = serviceLocator<TweetServiceAPI>();
 
   late User currentUser;
+  late User passedUser;
+  late bool isLoggedInUser;
 
   @override
   void initState() {
@@ -41,18 +46,25 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
   }
 
   @override
-  Widget build(BuildContext context) {
-    User user = ModalRoute.of(context)!.settings.arguments as User;
+  void didChangeDependencies() {
+    passedUser = ModalRoute.of(context)!.settings.arguments as User;
     User loggedInUser = Provider.of<UserProvider>(context).loggedInUser;
-    bool isLoggedInUser;
 
-    if (loggedInUser.userName == user.userName) {
+    if (loggedInUser.userName == passedUser.userName) {
       currentUser = loggedInUser;
       isLoggedInUser = true;
     } else {
-      currentUser = user;
+      currentUser = passedUser;
       isLoggedInUser = false;
     }
+    getUserTweets();
+    getUserLikedTweets();
+    getUserMediaTweets();
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: NestedScrollView(
@@ -195,41 +207,73 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
             ),
           ];
         },
-        body: TabBarView(controller: tabController, children: [
-          Text(
-            'Tweets',
-            style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            'Likes',
-            style: TextStyle(color: Colors.black),
-          ),
-          // ListView.builder(
-          //   itemCount: user!.usertweets.length,
-          //   itemBuilder: (context, index) {
-          //     print(user.usertweets.elementAt(index).userName);
-          //     return TweetCard(
-          //       tweet: user.usertweets.elementAt(index),
-          //       likedTweetsList: false,
-          //     );
-          //   },
-          // ),
-          // ListView.builder(
-          //   itemCount: user.likedTweets.length,
-          //   itemBuilder: (context, index) {
-          //     return TweetCard(
-          //       tweet: user.likedTweets.elementAt(index),
-          //       likedTweetsList: true,
-          //     );
-          //   },
-          // ),
-          Text(
-            'Media',
-            style: TextStyle(color: Colors.black),
-          ),
-        ]),
+        body: TabBarView(
+          controller: tabController,
+          children: [
+            Consumer<TweetProvider>(builder: (context, tweets, child) {
+              return tweets.userTweets.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: tweets.userTweets.length,
+                      itemBuilder: (context, index) {
+                        int key = tweets.userTweets.keys.elementAt(index);
+                        return TweetCard(
+                          tweet: tweets.userTweets[key]!,
+                        );
+                      },
+                    )
+                  : Container();
+            }),
+            Consumer<TweetProvider>(builder: (context, tweets, child) {
+              return tweets.likedTweets.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: tweets.likedTweets.length,
+                      itemBuilder: (context, index) {
+                        int key = tweets.userTweets.keys.elementAt(index);
+                        return TweetCard(
+                          tweet: tweets.likedTweets[key]!,
+                        );
+                      },
+                    )
+                  : Container();
+            }),
+            Consumer<TweetProvider>(builder: (context, tweets, child) {
+              return tweets.userMediaTweets.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: tweets.userMediaTweets.length,
+                      itemBuilder: (context, index) {
+                        int key = tweets.userMediaTweets.keys.elementAt(index);
+                        return TweetCard(
+                          tweet: tweets.userMediaTweets[key]!,
+                        );
+                      },
+                    )
+                  : Container();
+            }),
+          ],
+        ),
       ),
     );
+  }
+
+  getUserTweets() async {
+    List<Tweet> userTweets =
+        await tweetServiceWeb.getUserTweets(currentUser.userName);
+    Provider.of<TweetProvider>(context, listen: false)
+        .updateUserTweetsList(userTweets);
+  }
+
+  getUserLikedTweets() async {
+    List<Tweet> userLikedTweets =
+        await tweetServiceWeb.getUserLikedTweets(currentUser.userName);
+    Provider.of<TweetProvider>(context, listen: false)
+        .updateUserLikedTweetsList(userLikedTweets);
+  }
+
+  getUserMediaTweets() async {
+    List<Tweet> userMediaTweets =
+        await tweetServiceWeb.getUserMediaTweets(currentUser.userName);
+    Provider.of<TweetProvider>(context, listen: false)
+        .updateUserMediaTweetList(userMediaTweets);
   }
 
   @override
