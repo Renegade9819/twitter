@@ -114,11 +114,11 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return Opacity(
       opacity: disappear(shrinkOffset),
       child: CircleAvatar(
-        minRadius: 40 - shrinkOffset * 0.1,
+        minRadius: 40 - shrinkOffset * 0.12,
         backgroundColor: Colors.white,
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
-          minRadius: 39 - shrinkOffset * 0.1,
+          minRadius: 39 - shrinkOffset * 0.12,
           backgroundImage: imageWidget,
         ),
       ),

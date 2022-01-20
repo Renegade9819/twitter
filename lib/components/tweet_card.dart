@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter/models/tweet.dart';
 import 'package:twitter/models/user.dart';
+import 'package:twitter/providers/tweet_provider_new.dart';
+import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/screens/image_fullscreen.dart';
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/tweet_service.dart';
@@ -29,6 +32,8 @@ class _TweetCardState extends State<TweetCard> {
   final UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
 
   late Tweet tweet;
+
+  bool isRetweeted = false;
   @override
   void initState() {
     tweet = widget.tweet;
@@ -37,6 +42,8 @@ class _TweetCardState extends State<TweetCard> {
 
   @override
   Widget build(BuildContext context) {
+    User loggedInUser =
+        Provider.of<UserProvider>(context, listen: false).loggedInUser;
     return FutureBuilder<User>(
         future: userServiceWeb.getUser(tweet.userName),
         builder: (context, snapshot) {
@@ -130,7 +137,9 @@ class _TweetCardState extends State<TweetCard> {
                                       padding: EdgeInsets.zero,
                                       splashRadius: 20,
                                       constraints: const BoxConstraints(),
-                                      color: Colors.green,
+                                      color: isRetweeted
+                                          ? Colors.green
+                                          : Colors.black,
                                       onPressed: () {},
                                       icon: const Icon(
                                           CupertinoIcons.arrow_2_squarepath),
@@ -141,11 +150,11 @@ class _TweetCardState extends State<TweetCard> {
                                       padding: EdgeInsets.zero,
                                       splashRadius: 20,
                                       constraints: const BoxConstraints(),
-                                      color: tweet.isLiked!
+                                      color: tweet.isLiked
                                           ? Colors.red
                                           : Colors.black,
                                       onPressed: () {},
-                                      icon: tweet.isLiked!
+                                      icon: tweet.isLiked
                                           ? const Icon(
                                               CupertinoIcons.heart_fill)
                                           : const Icon(CupertinoIcons.heart),

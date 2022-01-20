@@ -82,4 +82,9 @@ class TweetProvider with ChangeNotifier {
     likedTweets.remove(tweetId);
     notifyListeners();
   }
+
+  void updateTweet(Tweet tweet) {
+    allTweets[tweet.tweetId!] = tweet;
+    notifyListeners();
+  }
 }

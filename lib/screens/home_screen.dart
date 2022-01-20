@@ -117,7 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
     if (index == 2) {
       return FloatingActionButton(
         backgroundColor: Colors.blue,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/chatScreen');
+        },
         child: const Icon(
           Icons.chat_rounded,
           color: Colors.white,

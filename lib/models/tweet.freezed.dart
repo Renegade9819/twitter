@@ -26,7 +26,7 @@ class _$TweetTearOff {
       {int? tweetId,
       required String tweetBody,
       int likes = 0,
-      bool? isLiked = false,
+      bool isLiked = false,
       bool containsMedia = false,
       int? mediaId,
       String? mediaURL,
@@ -58,7 +58,7 @@ mixin _$Tweet {
   int? get tweetId => throw _privateConstructorUsedError;
   String get tweetBody => throw _privateConstructorUsedError;
   int get likes => throw _privateConstructorUsedError;
-  bool? get isLiked => throw _privateConstructorUsedError;
+  bool get isLiked => throw _privateConstructorUsedError;
   bool get containsMedia => throw _privateConstructorUsedError;
   int? get mediaId => throw _privateConstructorUsedError;
   String? get mediaURL => throw _privateConstructorUsedError;
@@ -78,7 +78,7 @@ abstract class $TweetCopyWith<$Res> {
       {int? tweetId,
       String tweetBody,
       int likes,
-      bool? isLiked,
+      bool isLiked,
       bool containsMedia,
       int? mediaId,
       String? mediaURL,
@@ -122,7 +122,7 @@ class _$TweetCopyWithImpl<$Res> implements $TweetCopyWith<$Res> {
       isLiked: isLiked == freezed
           ? _value.isLiked
           : isLiked // ignore: cast_nullable_to_non_nullable
-              as bool?,
+              as bool,
       containsMedia: containsMedia == freezed
           ? _value.containsMedia
           : containsMedia // ignore: cast_nullable_to_non_nullable
@@ -156,7 +156,7 @@ abstract class _$TweetCopyWith<$Res> implements $TweetCopyWith<$Res> {
       {int? tweetId,
       String tweetBody,
       int likes,
-      bool? isLiked,
+      bool isLiked,
       bool containsMedia,
       int? mediaId,
       String? mediaURL,
@@ -201,7 +201,7 @@ class __$TweetCopyWithImpl<$Res> extends _$TweetCopyWithImpl<$Res>
       isLiked: isLiked == freezed
           ? _value.isLiked
           : isLiked // ignore: cast_nullable_to_non_nullable
-              as bool?,
+              as bool,
       containsMedia: containsMedia == freezed
           ? _value.containsMedia
           : containsMedia // ignore: cast_nullable_to_non_nullable
@@ -253,7 +253,7 @@ class _$_Tweet extends _Tweet {
   final int likes;
   @JsonKey()
   @override
-  final bool? isLiked;
+  final bool isLiked;
   @JsonKey()
   @override
   final bool containsMedia;
@@ -317,7 +317,7 @@ abstract class _Tweet extends Tweet {
       {int? tweetId,
       required String tweetBody,
       int likes,
-      bool? isLiked,
+      bool isLiked,
       bool containsMedia,
       int? mediaId,
       String? mediaURL,
@@ -334,7 +334,7 @@ abstract class _Tweet extends Tweet {
   @override
   int get likes;
   @override
-  bool? get isLiked;
+  bool get isLiked;
   @override
   bool get containsMedia;
   @override
