@@ -2,11 +2,11 @@
 
 The Twitter app made using Flutter.
 
-The `master` branch contains in-memory data for testing purposes. Look at the `backend` branch for API related stuff which will be the final app.
+Ahead of master branch. Will be the final app.
 
 The API is developed with Spring Boot. I'll post it on GitHub soon.
 
-`Note:` The app is currently in development. The tweet functionality is not yet completed.
+`Note:` The app is currently in development. The tweet functionality is not fully completed. Messages and notifications are pending.
 
 <img src="https://user-images.githubusercontent.com/20268535/149674926-44a5328c-d9b0-47af-a50c-a66e0fc77b28.png" width=40% height=40%>
 
