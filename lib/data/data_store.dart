@@ -51,6 +51,7 @@ class DataStore {
     isLiked: false,
     containsMedia: false,
     userName: "batman000",
+    postDate: DateTime.now(),
   );
 
   Tweet supermanTweetOne = Tweet(
@@ -61,6 +62,7 @@ class DataStore {
     containsMedia: true,
     mediaURL: "assets/images/supepic.jpg",
     userName: "supman",
+    postDate: DateTime.now(),
   );
 
   Tweet wwTweetOne = Tweet(
@@ -70,6 +72,7 @@ class DataStore {
     isLiked: false,
     containsMedia: false,
     userName: "wonderW",
+    postDate: DateTime.now(),
   );
 
   Tweet flashTweetOne = Tweet(
@@ -80,6 +83,7 @@ class DataStore {
     containsMedia: true,
     mediaURL: "assets/images/flashsalad.jpg",
     userName: "fastflash",
+    postDate: DateTime.now(),
   );
 
   DataStore._populated() {

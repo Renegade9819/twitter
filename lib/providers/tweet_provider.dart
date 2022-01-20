@@ -3,7 +3,7 @@ import 'package:twitter/models/tweet.dart';
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/tweet_service.dart';
 
-class TweetProvider with ChangeNotifier {
+class TweetProviderOld with ChangeNotifier {
   final TweetService tweetService = serviceLocator<TweetService>();
 
   Set<Tweet>? allTweets = {};
@@ -17,7 +17,7 @@ class TweetProvider with ChangeNotifier {
 
   void postTweet(Tweet newTweet) {
     allTweets!.add(newTweet);
-    tweetService.postTweet(newTweet.userName, newTweet, newTweet.tweetId);
+    tweetService.postTweet(newTweet.userName, newTweet, newTweet.tweetId!);
     notifyListeners();
   }
 
@@ -46,19 +46,19 @@ class TweetProvider with ChangeNotifier {
   }
 
   void _addToLikes(Tweet updatedTweet, String userName) {
-    Tweet? tweet = tweetService.getTweet(updatedTweet.tweetId);
+    Tweet? tweet = tweetService.getTweet(updatedTweet.tweetId!);
     likedTweets!.add(tweet!);
-    tweetService.likeTweet(userName, tweet.tweetId);
+    tweetService.likeTweet(userName, tweet.tweetId!);
   }
 
   void _removeFromLikes(Tweet updatedTweet, String userName) {
-    Tweet? tweet = tweetService.getTweet(updatedTweet.tweetId);
+    Tweet? tweet = tweetService.getTweet(updatedTweet.tweetId!);
     for (Tweet t in likedTweets!) {
       if (t.tweetId == tweet!.tweetId) {
         likedTweets!.remove(t);
         break;
       }
     }
-    tweetService.dislikeTweet(userName, tweet!.tweetId);
+    tweetService.dislikeTweet(userName, tweet!.tweetId!);
   }
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:twitter/api/api_constants.dart' as api;
 
 class ImageFullScreen extends StatefulWidget {
-  final String mediaURL;
-  const ImageFullScreen({Key? key, required this.mediaURL}) : super(key: key);
+  final int mediaId;
+  const ImageFullScreen({Key? key, required this.mediaId}) : super(key: key);
 
   @override
   _ImageFullScreenState createState() => _ImageFullScreenState();
@@ -31,11 +32,11 @@ class _ImageFullScreenState extends State<ImageFullScreen> {
             tag: 'imageHeroBig',
             child: InteractiveViewer(
               panEnabled: false,
-              boundaryMargin: EdgeInsets.all(100),
+              boundaryMargin: const EdgeInsets.all(100),
               minScale: 0.5,
               maxScale: 2,
               child: Image(
-                image: AssetImage(widget.mediaURL),
+                image: NetworkImage(api.mediaUrl + "${widget.mediaId}"),
                 fit: BoxFit.cover,
               ),
             ),

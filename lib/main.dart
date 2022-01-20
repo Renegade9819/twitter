@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter/components/message_tile.dart';
 import 'package:twitter/providers/tweet_provider.dart';
+import 'package:twitter/providers/tweet_provider_new.dart';
 import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/screens/another_profile_screen.dart';
 import 'package:twitter/screens/chat_screen.dart';
@@ -24,8 +25,9 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(
-          create: (context) => TweetProvider(),
+          create: (context) => TweetProviderOld(),
         ),
+        ChangeNotifierProvider(create: (context) => TweetProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

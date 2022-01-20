@@ -3,8 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:twitter/components/tweet_card.dart';
 import 'package:twitter/models/tweet.dart';
 import 'package:twitter/providers/tweet_provider.dart';
+import 'package:twitter/providers/tweet_provider_new.dart';
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/tweet_service.dart';
+import 'package:twitter/services/tweet_service_api.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -15,39 +17,43 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   TweetService tweetService = serviceLocator<TweetService>();
-  Set<Tweet>? tweets;
+  final TweetServiceAPI tweetServiceWeb = serviceLocator<TweetServiceAPI>();
 
   @override
   void initState() {
-    Provider.of<TweetProvider>(context, listen: false).loadAllTweets();
+    getAllTweets();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<TweetProvider>(builder: (context, tweets, child) {
-      return tweets.allTweets!.isNotEmpty
-          ? ListView.builder(
-              itemCount: tweets.allTweets!.length,
-              itemBuilder: (context, index) {
-                return TweetCard(
-                  tweet: tweets.allTweets!.elementAt(index),
-                );
-              },
+      return tweets.allTweets.isNotEmpty
+          ? RefreshIndicator(
+              child: ListView.builder(
+                itemCount: tweets.allTweets.length,
+                itemBuilder: (context, index) {
+                  int key = tweets.allTweets.keys.elementAt(index);
+                  return TweetCard(
+                    tweet: tweets.allTweets[key]!,
+                  );
+                },
+              ),
+              onRefresh: pullRefreshTweets,
             )
-          : Container();
+          : const Center(child: CircularProgressIndicator());
     });
   }
 
-  //   return tweets!.isNotEmpty
-  //       ? ListView.builder(
-  //           itemCount: tweets!.length,
-  //           itemBuilder: (context, index) {
-  //             return TweetCard(
-  //               tweet: tweets!.elementAt(index),
-  //             );
-  //           },
-  //         )
-  //       : Container();
-  // }
+  getAllTweets() async {
+    List<Tweet> allTweets = await tweetServiceWeb.getAllTweets();
+    Provider.of<TweetProvider>(context, listen: false)
+        .updateLatestTweetList(allTweets);
+  }
+
+  Future<void> pullRefreshTweets() async {
+    List<Tweet> allTweets = await tweetServiceWeb.getAllTweets();
+    Provider.of<TweetProvider>(context, listen: false)
+        .updateLatestTweetList(allTweets);
+  }
 }

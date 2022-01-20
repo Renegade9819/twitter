@@ -1,7 +1,17 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter/components/CustomCircularProgressIndicator.dart';
+import 'package:twitter/models/tweet.dart';
+import 'package:twitter/models/user.dart';
+import 'package:twitter/providers/tweet_provider_new.dart';
+import 'package:twitter/providers/user_provider.dart';
+import 'package:twitter/api/api_constants.dart' as api;
+import 'package:twitter/services/service_locator.dart';
+import 'package:twitter/services/tweet_service_api.dart';
 
 class TweetScreen extends StatefulWidget {
   const TweetScreen({Key? key}) : super(key: key);
@@ -12,10 +22,18 @@ class TweetScreen extends StatefulWidget {
 
 class _TweetScreenState extends State<TweetScreen> {
   TextEditingController tweetController = TextEditingController();
+  final TweetServiceAPI tweetServiceWeb = serviceLocator<TweetServiceAPI>();
   int tweetLength = 280;
+
+  late User loggedInUser;
+
+  bool isMediaPicked = false;
+  late PlatformFile mediaFile;
 
   @override
   void initState() {
+    loggedInUser =
+        Provider.of<UserProvider>(context, listen: false).loggedInUser;
     super.initState();
   }
 
@@ -45,7 +63,51 @@ class _TweetScreenState extends State<TweetScreen> {
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  String tweetBody = tweetController.text.trim();
+                  if (tweetBody.isEmpty) {
+                    const snackBar = SnackBar(
+                      content: Text("Tweet does not contain any text."),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+                    if (isMediaPicked == false) {
+                      Tweet postTweet = Tweet(
+                        tweetBody: tweetBody,
+                        postDate: DateTime.now(),
+                        userName: loggedInUser.userName,
+                      );
+                      Tweet postedTweet =
+                          await tweetServiceWeb.postTweet(postTweet);
+                      TweetProvider tweetProvider =
+                          Provider.of<TweetProvider>(context, listen: false);
+                      tweetProvider.addToAllTweets(postedTweet);
+                      tweetProvider.addToUserTweets(postedTweet);
+                      Navigator.pop(context);
+                    } else {
+                      int mediaId = await tweetServiceWeb.postMediaTweet(
+                          File(mediaFile.path!), loggedInUser.userName);
+
+                      Tweet postTweet = Tweet(
+                        tweetBody: tweetBody,
+                        postDate: DateTime.now(),
+                        userName: loggedInUser.userName,
+                        containsMedia: true,
+                        mediaId: mediaId,
+                      );
+
+                      Tweet postedTweet =
+                          await tweetServiceWeb.postTweet(postTweet);
+
+                      TweetProvider tweetProvider =
+                          Provider.of<TweetProvider>(context, listen: false);
+                      tweetProvider.addToAllTweets(postedTweet);
+                      tweetProvider.addToUserMediaTweets(postedTweet);
+                      Navigator.pop(context);
+                    }
+                  }
+                },
                 child: const Text(
                   'Tweet',
                   style: TextStyle(
@@ -68,11 +130,10 @@ class _TweetScreenState extends State<TweetScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 16,
                 backgroundColor: Colors.white,
-                backgroundImage: NetworkImage(
-                    "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"),
+                backgroundImage: buildAvatar(loggedInUser.avatarId),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -106,7 +167,19 @@ class _TweetScreenState extends State<TweetScreen> {
                   constraints: const BoxConstraints(),
                   padding: EdgeInsets.zero,
                   splashRadius: 24,
-                  onPressed: () {},
+                  onPressed: () async {
+                    FilePickerResult? result =
+                        await FilePicker.platform.pickFiles(
+                      type: FileType.image,
+                    );
+
+                    if (result != null) {
+                      setState(() {
+                        mediaFile = result.files.single;
+                        isMediaPicked = true;
+                      });
+                    }
+                  },
                   icon: const Icon(
                     Icons.add_photo_alternate_rounded,
                     color: Colors.blue,
@@ -125,5 +198,16 @@ class _TweetScreenState extends State<TweetScreen> {
         ),
       ),
     );
+  }
+
+  ImageProvider buildAvatar(int? avatarId) {
+    ImageProvider imageWidget;
+    if (avatarId == null) {
+      imageWidget = const AssetImage("assets/avatars/default_avatar.png");
+      return imageWidget;
+    } else {
+      imageWidget = NetworkImage(api.avatarUrl + "$avatarId");
+      return imageWidget;
+    }
   }
 }

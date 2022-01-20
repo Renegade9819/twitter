@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:twitter/models/user.dart';
 import 'package:twitter/services/service_locator.dart';
-import 'package:twitter/services/user_service.dart';
 import 'package:twitter/services/user_service_api.dart';
+import 'package:twitter/api/api_constants.dart' as api;
 
 class SearchUsers extends SearchDelegate<String> {
   UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
@@ -69,6 +69,15 @@ class SearchUsers extends SearchDelegate<String> {
         itemBuilder: (context, index) {
           final suggestion = suggestions[index];
 
+          int? avatarId = suggestion.avatarId;
+
+          ImageProvider imageWidget;
+          if (avatarId == null) {
+            imageWidget = const AssetImage("assets/avatars/default_avatar.png");
+          } else {
+            imageWidget = NetworkImage(api.avatarUrl + "$avatarId");
+          }
+
           return ListTile(
             tileColor: Colors.white,
             leading: Padding(
@@ -76,9 +85,7 @@ class SearchUsers extends SearchDelegate<String> {
               child: CircleAvatar(
                 radius: 25,
                 backgroundColor: Colors.white,
-                backgroundImage: suggestion.avatarURL == null
-                    ? const AssetImage("assets/avatars/default_avatar.png")
-                    : AssetImage(suggestion.avatarURL!),
+                backgroundImage: imageWidget,
               ),
             ),
             title: Text(
