@@ -17,8 +17,6 @@ The API is developed with Spring Boot. I'll post it on GitHub soon.
 
 <img src="https://user-images.githubusercontent.com/20268535/149675105-097044bd-c2e6-4e1e-aab7-7e9ddfac2690.png" width=40% height=40%>  <img src="https://user-images.githubusercontent.com/20268535/149675123-b03c1123-e03d-41bc-97b9-cdd8da9abbaa.png" width=40% height=40%>
 
-<img src="https://user-images.githubusercontent.com/20268535/149675174-afc66ce6-6057-40e2-9e42-053fc7873e6b.png" width=40% height=40%>
-
 <img src="https://user-images.githubusercontent.com/20268535/149675174-afc66ce6-6057-40e2-9e42-053fc7873e6b.png" width=40% height=40%>  <img src="https://user-images.githubusercontent.com/20268535/150398003-473b660c-b599-4181-b586-1f396bc8bb49.png" width=40% height=40%>
 
 <img src="https://user-images.githubusercontent.com/20268535/150398189-5fed510e-fe60-4601-a6c5-c09cd7f003da.png" width=40% height=40%>
