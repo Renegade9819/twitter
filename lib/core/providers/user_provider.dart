@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:twitter/models/user.dart';
+import 'package:twitter/core/models/user.dart';
 
 class UserProvider with ChangeNotifier {
   late User loggedInUser;

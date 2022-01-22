@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:twitter/models/tweet.dart';
-import 'package:twitter/providers/tweet_provider.dart';
-import 'package:twitter/services/service_locator.dart';
-import 'package:twitter/services/tweet_service_api.dart';
-import 'package:twitter/widgets/tweet_card.dart';
+import 'package:twitter/core/models/tweet.dart';
+import 'package:twitter/core/providers/tweet_provider.dart';
+import 'package:twitter/core/services/service_locator.dart';
+import 'package:twitter/core/services/tweet_service_api.dart';
+import 'package:twitter/ui/widgets/tweet_card.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);

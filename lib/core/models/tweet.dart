@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:twitter/models/user.dart';
 
 part 'tweet.freezed.dart';
 part 'tweet.g.dart';

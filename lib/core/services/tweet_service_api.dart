@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:twitter/models/tweet.dart';
+import 'package:twitter/core/models/tweet.dart';
 
 abstract class TweetServiceAPI {
   Future<Tweet> postTweet(Tweet tweet);

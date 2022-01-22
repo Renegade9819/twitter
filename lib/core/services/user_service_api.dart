@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:twitter/models/user.dart';
+import 'package:twitter/core/models/user.dart';
 
 abstract class UserServiceAPI {
   Future<User> getUser(String userName);

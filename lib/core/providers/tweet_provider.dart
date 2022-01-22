@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:twitter/models/tweet.dart';
-import 'package:twitter/services/service_locator.dart';
-import 'package:twitter/services/tweet_service_api.dart';
+import 'package:twitter/core/models/tweet.dart';
+import 'package:twitter/core/services/service_locator.dart';
+import 'package:twitter/core/services/tweet_service_api.dart';
 
 class TweetProvider with ChangeNotifier {
   final TweetServiceAPI tweetServiceWeb = serviceLocator<TweetServiceAPI>();

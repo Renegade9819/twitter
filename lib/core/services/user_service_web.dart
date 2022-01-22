@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:twitter/models/user.dart';
-
 import 'package:twitter/constants/api_constants.dart' as api;
-import 'package:twitter/services/user_service_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:twitter/core/models/user.dart';
+import 'package:twitter/core/services/user_service_api.dart';
 
 class UserServiceWeb implements UserServiceAPI {
   String apiUrl = api.baseUrl;
