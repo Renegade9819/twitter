@@ -14,7 +14,7 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
-  GlobalKey<FormState> _signInFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _signInFormKey = GlobalKey<FormState>();
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
