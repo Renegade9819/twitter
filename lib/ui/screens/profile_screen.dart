@@ -13,9 +13,8 @@ import 'package:twitter/ui/widgets/profile_sliver_appbar.dart';
 import 'package:twitter/ui/widgets/tweet_card.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({
-    Key? key,
-  }) : super(key: key);
+  final User passedUser;
+  const ProfileScreen({Key? key, required this.passedUser}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -29,7 +28,6 @@ class _ProfileScreenState extends State<ProfileScreen>
   final TweetService tweetServiceWeb = serviceLocator<TweetService>();
 
   late User currentUser;
-  late User passedUser;
   late bool isLoggedInUser;
 
   @override
@@ -40,14 +38,13 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   void didChangeDependencies() {
-    passedUser = ModalRoute.of(context)!.settings.arguments as User;
     User loggedInUser = Provider.of<UserProvider>(context).loggedInUser;
 
-    if (loggedInUser.userName == passedUser.userName) {
+    if (loggedInUser.userName == widget.passedUser.userName) {
       currentUser = loggedInUser;
       isLoggedInUser = true;
     } else {
-      currentUser = passedUser;
+      currentUser = widget.passedUser;
       isLoggedInUser = false;
     }
     getUserTweets();

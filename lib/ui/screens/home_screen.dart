@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           backgroundColor: Colors.white,
-          title: buildAppBarTitle(_selectedIndex),
+          title: AppBarTitle(index: _selectedIndex),
           actions: [
             IconButton(
               onPressed: () {
@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Center(
           child: _pages.elementAt(_selectedIndex),
         ),
-        floatingActionButton: buildFAB(_selectedIndex),
+        floatingActionButton: FAB(index: _selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
@@ -112,8 +112,54 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedIndex = index;
     });
   }
+}
 
-  Widget buildFAB(int index) {
+class AppBarTitle extends StatelessWidget {
+  final int index;
+  const AppBarTitle({Key? key, required this.index}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (index == 0) {
+      return Image.asset(
+        "assets/images/twitterlogo.png",
+        height: 20,
+        width: 20,
+      );
+    } else if (index == 1) {
+      return const Text(
+        'Notifications',
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else {
+      return TextField(
+        textInputAction: TextInputAction.done,
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+          hintText: "Search for people",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide.none,
+          ),
+          fillColor: Colors.grey[200],
+          filled: true,
+          isDense: true,
+          contentPadding: const EdgeInsets.all(10),
+        ),
+      );
+    }
+  }
+}
+
+class FAB extends StatelessWidget {
+  final int index;
+  const FAB({Key? key, required this.index}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     if (index == 2) {
       return FloatingActionButton(
         backgroundColor: Colors.blue,
@@ -150,51 +196,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       );
     }
-  }
-
-  Widget buildAppBarTitle(int index) {
-    if (index == 0) {
-      return buildAppBarTitleImage();
-    } else if (index == 1) {
-      return buildAppBarTitleText();
-    } else {
-      return buildAppBarTextField();
-    }
-  }
-
-  TextField buildAppBarTextField() {
-    return TextField(
-      textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        hintText: "Search for people",
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide.none,
-        ),
-        fillColor: Colors.grey[200],
-        filled: true,
-        isDense: true,
-        contentPadding: const EdgeInsets.all(10),
-      ),
-    );
-  }
-
-  Text buildAppBarTitleText() {
-    return const Text(
-      'Notifications',
-      style: TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-
-  Image buildAppBarTitleImage() {
-    return Image.asset(
-      "assets/images/twitterlogo.png",
-      height: 20,
-      width: 20,
-    );
   }
 }

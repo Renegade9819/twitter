@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twitter/core/models/user.dart';
 import 'package:twitter/ui/screens/profile_screen.dart';
 import 'package:twitter/ui/screens/chat_screen.dart';
 import 'package:twitter/ui/screens/edit_profile_screen.dart';
@@ -29,7 +30,11 @@ class AppRouter {
       case '/home':
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case "/profile":
-        return MaterialPageRoute(builder: (_) => const ProfileScreen());
+        var user = settings.arguments as User;
+        return MaterialPageRoute(
+            builder: (_) => ProfileScreen(
+                  passedUser: user,
+                ));
       case '/tweetScreen':
         return MaterialPageRoute(builder: (_) => const TweetScreen());
       case '/chatScreen':
