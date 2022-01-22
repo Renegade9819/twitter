@@ -14,8 +14,4 @@ class UserProvider with ChangeNotifier {
     loggedInUser = updatedUser;
     notifyListeners();
   }
-
-  void registerUser(User user) {
-    notifyListeners();
-  }
 }
