@@ -1,9 +1,4 @@
-import 'package:twitter/services/service_locator.dart';
-import 'package:twitter/services/user_service.dart';
-
 class FormUtility {
-  UserService userService = serviceLocator<UserService>();
-
   RegExp regexUsername = RegExp(r'^[a-zA-Z0-9]+$');
   RegExp regexName = RegExp(r'^[a-zA-Z ]+$');
 

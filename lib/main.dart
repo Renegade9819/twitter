@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:twitter/components/message_tile.dart';
 import 'package:twitter/providers/tweet_provider.dart';
-import 'package:twitter/providers/tweet_provider_new.dart';
 import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/screens/another_profile_screen.dart';
 import 'package:twitter/screens/chat_screen.dart';
@@ -17,6 +15,7 @@ import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/terms/cookie_screen.dart';
 import 'package:twitter/terms/privacy_screen.dart';
 import 'package:twitter/terms/terms_screen.dart';
+import 'package:twitter/widgets/message_tile.dart';
 
 void main() {
   setupServiceLocator();
@@ -24,9 +23,6 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(
-          create: (context) => TweetProviderOld(),
-        ),
         ChangeNotifierProvider(create: (context) => TweetProvider()),
       ],
       child: MaterialApp(

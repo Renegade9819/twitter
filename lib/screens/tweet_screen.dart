@@ -4,14 +4,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:twitter/components/CustomCircularProgressIndicator.dart';
 import 'package:twitter/models/tweet.dart';
 import 'package:twitter/models/user.dart';
-import 'package:twitter/providers/tweet_provider_new.dart';
+import 'package:twitter/providers/tweet_provider.dart';
 import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/api/api_constants.dart' as api;
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/tweet_service_api.dart';
+import 'package:twitter/widgets/CustomCircularProgressIndicator.dart';
 
 class TweetScreen extends StatefulWidget {
   const TweetScreen({Key? key}) : super(key: key);

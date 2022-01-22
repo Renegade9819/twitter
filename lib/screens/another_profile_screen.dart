@@ -8,16 +8,16 @@ import 'package:extended_sliver/extended_sliver.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:twitter/components/CustomSliverAppBarDelegate.dart';
-import 'package:twitter/components/tweet_card.dart';
+
 import 'package:twitter/models/tweet.dart';
 import 'package:twitter/models/user.dart';
-import 'package:twitter/providers/tweet_provider_new.dart';
+import 'package:twitter/providers/tweet_provider.dart';
 import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/tweet_service_api.dart';
-import 'package:twitter/services/user_service.dart';
 import 'package:twitter/services/user_service_api.dart';
+import 'package:twitter/widgets/CustomSliverAppBarDelegate.dart';
+import 'package:twitter/widgets/tweet_card.dart';
 
 class AnotherProfileScreen extends StatefulWidget {
   const AnotherProfileScreen({

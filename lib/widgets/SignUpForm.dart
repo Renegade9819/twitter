@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:twitter/models/user.dart';
 import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/services/service_locator.dart';
-import 'package:twitter/services/user_service.dart';
 import 'package:twitter/services/user_service_api.dart';
 import 'package:twitter/utils/form_util.dart';
 
@@ -17,8 +16,6 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  UserService userService = serviceLocator<UserService>();
 
   DateTime birthDate = DateTime.now();
   String displayDate = "";

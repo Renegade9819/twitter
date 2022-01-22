@@ -1,64 +1,90 @@
 import 'package:flutter/cupertino.dart';
 import 'package:twitter/models/tweet.dart';
 import 'package:twitter/services/service_locator.dart';
-import 'package:twitter/services/tweet_service.dart';
+import 'package:twitter/services/tweet_service_api.dart';
 
-class TweetProviderOld with ChangeNotifier {
-  final TweetService tweetService = serviceLocator<TweetService>();
+class TweetProvider with ChangeNotifier {
+  final TweetServiceAPI tweetServiceWeb = serviceLocator<TweetServiceAPI>();
 
-  Set<Tweet>? allTweets = {};
-  Set<Tweet>? likedTweets = {};
-  Set<Tweet> reTweets = {};
+  Map<int, Tweet> allTweets = {};
+  Map<int, Tweet> likedTweets = {};
+  Map<int, Tweet> userTweets = {};
+  Map<int, Tweet> userMediaTweets = {};
 
-  void loadAllTweets() {
-    allTweets = tweetService.getAllTweets();
-    //notifyListeners();
-  }
-
-  void postTweet(Tweet newTweet) {
-    allTweets!.add(newTweet);
-    tweetService.postTweet(newTweet.userName, newTweet, newTweet.tweetId!);
-    notifyListeners();
-  }
-
-  void loadLikedTweets(String userName) {
-    likedTweets = tweetService.getAllLikedTweets(userName);
-    notifyListeners();
-  }
-
-  void toggleLike(int tweetId, String userName) {
-    Tweet? tweet;
-    for (Tweet likedTweet in likedTweets!) {
-      if (likedTweet.tweetId == tweetId) {
-        tweet = likedTweet;
-      }
-    }
-    bool? _isTweetLiked = tweet!.isLiked;
-    if (_isTweetLiked != null) {
-      Tweet updatedTweet = tweet.copyWith(isLiked: !_isTweetLiked);
-      if (_isTweetLiked) {
-        _addToLikes(updatedTweet, userName);
-      } else {
-        _removeFromLikes(updatedTweet, userName);
-      }
+  Future<void> updateLatestTweetList(List<Tweet> updatedTweets) async {
+    allTweets = {};
+    for (var tweet in updatedTweets) {
+      allTweets[tweet.tweetId!] = tweet;
     }
     notifyListeners();
   }
 
-  void _addToLikes(Tweet updatedTweet, String userName) {
-    Tweet? tweet = tweetService.getTweet(updatedTweet.tweetId!);
-    likedTweets!.add(tweet!);
-    tweetService.likeTweet(userName, tweet.tweetId!);
+  Future<void> updateUserTweetsList(List<Tweet> updatedUserTweets) async {
+    userTweets = {};
+    for (var tweet in updatedUserTweets) {
+      userTweets[tweet.tweetId!] = tweet;
+    }
+    notifyListeners();
   }
 
-  void _removeFromLikes(Tweet updatedTweet, String userName) {
-    Tweet? tweet = tweetService.getTweet(updatedTweet.tweetId!);
-    for (Tweet t in likedTweets!) {
-      if (t.tweetId == tweet!.tweetId) {
-        likedTweets!.remove(t);
-        break;
-      }
+  Future<void> updateUserLikedTweetsList(List<Tweet> updatedLikedTweets) async {
+    likedTweets = {};
+    for (var tweet in updatedLikedTweets) {
+      likedTweets[tweet.tweetId!] = tweet;
     }
-    tweetService.dislikeTweet(userName, tweet!.tweetId!);
+    notifyListeners();
+  }
+
+  Future<void> updateUserMediaTweetList(List<Tweet> updatedMediaTweets) async {
+    userMediaTweets = {};
+    for (var tweet in updatedMediaTweets) {
+      userMediaTweets[tweet.tweetId!] = tweet;
+    }
+    notifyListeners();
+  }
+
+  void addToAllTweets(Tweet tweet) {
+    allTweets.addAll({tweet.tweetId!: tweet});
+    notifyListeners();
+  }
+
+  void removeFromAllTweets(int tweetId) {
+    allTweets.remove(tweetId);
+    notifyListeners();
+  }
+
+  void addToUserTweets(Tweet tweet) {
+    userTweets.addAll({tweet.tweetId!: tweet});
+    notifyListeners();
+  }
+
+  void removeFromUserTweets(int tweetId) {
+    userTweets.remove(tweetId);
+    notifyListeners();
+  }
+
+  void addToUserMediaTweets(Tweet tweet) {
+    userMediaTweets.addAll({tweet.tweetId!: tweet});
+    notifyListeners();
+  }
+
+  void removeFromUserMediaTweets(int tweetId) {
+    userMediaTweets.remove(tweetId);
+    notifyListeners();
+  }
+
+  void addToLikedTweets(Tweet tweet) {
+    likedTweets.addAll({tweet.tweetId!: tweet});
+    notifyListeners();
+  }
+
+  void removeFromLikedTweets(int tweetId) {
+    likedTweets.remove(tweetId);
+    notifyListeners();
+  }
+
+  void updateTweet(Tweet tweet) {
+    allTweets[tweet.tweetId!] = tweet;
+    notifyListeners();
   }
 }

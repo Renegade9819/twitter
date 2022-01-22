@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:twitter/components/expandable_fab.dart';
 import 'package:twitter/models/user.dart';
-import 'package:twitter/navigation_bar_screens/feed_screen.dart';
-import 'package:twitter/navigation_bar_screens/message_screen.dart';
-import 'package:twitter/navigation_bar_screens/notification_screen.dart';
 import 'package:twitter/providers/user_provider.dart';
+import 'package:twitter/screens/navigation_bar_screens/feed_screen.dart';
+import 'package:twitter/screens/navigation_bar_screens/message_screen.dart';
+import 'package:twitter/screens/navigation_bar_screens/notification_screen.dart';
 import 'package:twitter/screens/search_page.dart';
 import 'package:twitter/api/api_constants.dart' as api;
+import 'package:twitter/widgets/expandable_fab.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
