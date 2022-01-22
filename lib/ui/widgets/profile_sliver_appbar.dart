@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:twitter/constants/api_constants.dart' as api;
 
-class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+class ProfileAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
   final int? avatarId;
   final int? bgId;
-  const CustomSliverAppBarDelegate(
+  const ProfileAppBarDelegate(
       {required this.expandedHeight,
       required this.avatarId,
       required this.bgId});

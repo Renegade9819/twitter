@@ -5,12 +5,10 @@ import 'package:twitter/constants/api_constants.dart' as api;
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:twitter/core/models/user.dart';
-import 'package:twitter/core/services/user_service_api.dart';
 
-class UserServiceWeb implements UserServiceAPI {
+class UserService {
   String apiUrl = api.baseUrl;
 
-  @override
   Future<bool> checkIfUserExists(String userName) async {
     final response =
         await http.get(Uri.parse(apiUrl + "/user/exists/$userName"));
@@ -21,7 +19,6 @@ class UserServiceWeb implements UserServiceAPI {
     }
   }
 
-  @override
   Future<User> getUser(String userName) async {
     final response = await http.get(Uri.parse(apiUrl + "/user/$userName"));
     if (response.statusCode == 200) {
@@ -31,7 +28,6 @@ class UserServiceWeb implements UserServiceAPI {
     }
   }
 
-  @override
   Future<bool> loginUser(String userName, String password) async {
     final response =
         await http.get(Uri.parse(apiUrl + "/user/login/$userName/$password"));
@@ -42,7 +38,6 @@ class UserServiceWeb implements UserServiceAPI {
     }
   }
 
-  @override
   Future<bool> registerUser(User user) async {
     final response = await http.post(
       Uri.parse(apiUrl + "/user/signup"),
@@ -56,7 +51,6 @@ class UserServiceWeb implements UserServiceAPI {
     }
   }
 
-  @override
   Future<User> updateUser(User user) async {
     final response = await http.put(
       Uri.parse(apiUrl + "/user/profile/update"),
@@ -73,7 +67,6 @@ class UserServiceWeb implements UserServiceAPI {
     }
   }
 
-  @override
   Future<List<User>> getUserBySearchTerm(String searchTerm) async {
     List<User> searchResults;
     final response =
@@ -86,7 +79,6 @@ class UserServiceWeb implements UserServiceAPI {
     return searchResults;
   }
 
-  @override
   Future<bool> uploadUserAvatar(File avatarFile, String userName) async {
     var avatarUploadURI = Uri.parse(apiUrl + "/user/set/avatar/$userName");
     var avatarRequest = http.MultipartRequest("POST", avatarUploadURI);
@@ -103,7 +95,6 @@ class UserServiceWeb implements UserServiceAPI {
     }
   }
 
-  @override
   Future<bool> uploadUserBackground(File bgFile, String userName) async {
     var bgUploadURI = Uri.parse(apiUrl + "/user/set/background/$userName");
     var bgRequest = http.MultipartRequest("POST", bgUploadURI);

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:twitter/core/models/tweet.dart';
 import 'package:twitter/core/services/service_locator.dart';
-import 'package:twitter/core/services/tweet_service_api.dart';
+import 'package:twitter/core/services/tweet_service.dart';
 
 class TweetProvider with ChangeNotifier {
-  final TweetServiceAPI tweetServiceWeb = serviceLocator<TweetServiceAPI>();
+  final TweetService tweetServiceWeb = serviceLocator<TweetService>();
 
   Map<int, Tweet> allTweets = {};
   Map<int, Tweet> likedTweets = {};

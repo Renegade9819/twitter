@@ -31,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
     loggedInUser = Provider.of<UserProvider>(context).loggedInUser;
     int? avatarId = loggedInUser!.avatarId;
-    int? bgId = loggedInUser!.bgId;
     ImageProvider avatarImageWidget;
     if (avatarId == null) {
       avatarImageWidget = const AssetImage("assets/avatars/default_avatar.png");

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:twitter/core/models/tweet.dart';
 import 'package:twitter/core/providers/tweet_provider.dart';
 import 'package:twitter/core/services/service_locator.dart';
-import 'package:twitter/core/services/tweet_service_api.dart';
+import 'package:twitter/core/services/tweet_service.dart';
 import 'package:twitter/ui/widgets/tweet_card.dart';
 
 class FeedScreen extends StatefulWidget {
@@ -14,7 +14,7 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-  final TweetServiceAPI tweetServiceWeb = serviceLocator<TweetServiceAPI>();
+  final TweetService tweetServiceWeb = serviceLocator<TweetService>();
 
   @override
   void initState() {

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 
-class CustomCircularProgressIndicator extends StatefulWidget {
+class TweetCharCountIndicator extends StatefulWidget {
   final TextEditingController controller;
-  const CustomCircularProgressIndicator({Key? key, required this.controller})
+  const TweetCharCountIndicator({Key? key, required this.controller})
       : super(key: key);
 
   @override
-  _CustomCircularProgressIndicatorState createState() =>
-      _CustomCircularProgressIndicatorState();
+  _TweetCharCountIndicatorState createState() =>
+      _TweetCharCountIndicatorState();
 }
 
-class _CustomCircularProgressIndicatorState
-    extends State<CustomCircularProgressIndicator> {
+class _TweetCharCountIndicatorState extends State<TweetCharCountIndicator> {
   double progressValue = 0;
 
   @override

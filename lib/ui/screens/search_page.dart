@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:twitter/constants/api_constants.dart' as api;
 import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/services/service_locator.dart';
-import 'package:twitter/core/services/user_service_api.dart';
+import 'package:twitter/core/services/user_service.dart';
 
 class SearchUsers extends SearchDelegate<String> {
-  UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
+  UserService userServiceWeb = serviceLocator<UserService>();
 
   @override
   List<Widget>? buildActions(BuildContext context) {

@@ -7,8 +7,8 @@ import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/providers/user_provider.dart';
 import 'package:twitter/core/services/service_locator.dart';
 import 'package:twitter/constants/api_constants.dart' as api;
-import 'package:twitter/core/services/tweet_service_api.dart';
-import 'package:twitter/core/services/user_service_api.dart';
+import 'package:twitter/core/services/tweet_service.dart';
+import 'package:twitter/core/services/user_service.dart';
 import 'package:twitter/ui/screens/image_fullscreen.dart';
 
 class TweetCard extends StatefulWidget {
@@ -23,8 +23,8 @@ class TweetCard extends StatefulWidget {
 }
 
 class _TweetCardState extends State<TweetCard> {
-  final TweetServiceAPI tweetServiceWeb = serviceLocator<TweetServiceAPI>();
-  final UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
+  final TweetService tweetServiceWeb = serviceLocator<TweetService>();
+  final UserService userServiceWeb = serviceLocator<UserService>();
 
   late Tweet tweet;
 
@@ -50,135 +50,132 @@ class _TweetCardState extends State<TweetCard> {
                 return Container();
               } else {
                 return Card(
-                  child: Container(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () => Navigator.pushNamed(context, '/profile',
-                              arguments: snapshot.data),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundColor: Colors.white,
-                              backgroundImage:
-                                  buildAvatar(snapshot.data!.avatarId),
-                            ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () => Navigator.pushNamed(context, '/profile',
+                            arguments: snapshot.data),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Colors.white,
+                            backgroundImage:
+                                buildAvatar(snapshot.data!.avatarId),
                           ),
                         ),
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Text(
-                                      snapshot.data!.name,
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Text(
-                                      '@' + snapshot.data!.userName,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    const Text(
-                                      '•',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Text(
-                                      getTweetPostDate(tweet.postDate),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 3),
-                                Text(
-                                  tweet.tweetBody,
-                                  textAlign: TextAlign.start,
-                                  overflow: TextOverflow.visible,
-                                ),
-                                tweet.containsMedia
-                                    ? Center(
-                                        child:
-                                            buildMedia(tweet.mediaId!, context))
-                                    : Container(),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    IconButton(
-                                      highlightColor: Colors.transparent,
-                                      iconSize: 16,
-                                      padding: EdgeInsets.zero,
-                                      splashRadius: 20,
-                                      constraints: const BoxConstraints(),
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                          CupertinoIcons.chat_bubble),
-                                    ),
-                                    IconButton(
-                                      highlightColor: Colors.transparent,
-                                      iconSize: 16,
-                                      padding: EdgeInsets.zero,
-                                      splashRadius: 20,
-                                      constraints: const BoxConstraints(),
-                                      color: isRetweeted
-                                          ? Colors.green
-                                          : Colors.black,
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                          CupertinoIcons.arrow_2_squarepath),
-                                    ),
-                                    IconButton(
-                                      highlightColor: Colors.transparent,
-                                      iconSize: 16,
-                                      padding: EdgeInsets.zero,
-                                      splashRadius: 20,
-                                      constraints: const BoxConstraints(),
-                                      color: tweet.isLiked
-                                          ? Colors.red
-                                          : Colors.black,
-                                      onPressed: () {},
-                                      icon: tweet.isLiked
-                                          ? const Icon(
-                                              CupertinoIcons.heart_fill)
-                                          : const Icon(CupertinoIcons.heart),
-                                    ),
-                                    IconButton(
-                                      highlightColor: Colors.transparent,
-                                      iconSize: 16,
-                                      padding: EdgeInsets.zero,
-                                      splashRadius: 20,
-                                      constraints: const BoxConstraints(),
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.share_outlined),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
+                      ),
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Text(
+                                    snapshot.data!.name,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    '@' + snapshot.data!.userName,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  const Text(
+                                    '•',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w300),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    getTweetPostDate(tweet.postDate),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                tweet.tweetBody,
+                                textAlign: TextAlign.start,
+                                overflow: TextOverflow.visible,
+                              ),
+                              tweet.containsMedia
+                                  ? Center(
+                                      child:
+                                          buildMedia(tweet.mediaId!, context))
+                                  : Container(),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  IconButton(
+                                    highlightColor: Colors.transparent,
+                                    iconSize: 16,
+                                    padding: EdgeInsets.zero,
+                                    splashRadius: 20,
+                                    constraints: const BoxConstraints(),
+                                    onPressed: () {},
+                                    icon:
+                                        const Icon(CupertinoIcons.chat_bubble),
+                                  ),
+                                  IconButton(
+                                    highlightColor: Colors.transparent,
+                                    iconSize: 16,
+                                    padding: EdgeInsets.zero,
+                                    splashRadius: 20,
+                                    constraints: const BoxConstraints(),
+                                    color: isRetweeted
+                                        ? Colors.green
+                                        : Colors.black,
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                        CupertinoIcons.arrow_2_squarepath),
+                                  ),
+                                  IconButton(
+                                    highlightColor: Colors.transparent,
+                                    iconSize: 16,
+                                    padding: EdgeInsets.zero,
+                                    splashRadius: 20,
+                                    constraints: const BoxConstraints(),
+                                    color: tweet.isLiked
+                                        ? Colors.red
+                                        : Colors.black,
+                                    onPressed: () {},
+                                    icon: tweet.isLiked
+                                        ? const Icon(CupertinoIcons.heart_fill)
+                                        : const Icon(CupertinoIcons.heart),
+                                  ),
+                                  IconButton(
+                                    highlightColor: Colors.transparent,
+                                    iconSize: 16,
+                                    padding: EdgeInsets.zero,
+                                    splashRadius: 20,
+                                    constraints: const BoxConstraints(),
+                                    onPressed: () {},
+                                    icon: const Icon(Icons.share_outlined),
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
                         ),
-                        IconButton(
-                          highlightColor: Colors.transparent,
-                          iconSize: 20,
-                          splashRadius: 20,
-                          constraints: const BoxConstraints(),
-                          onPressed: () {},
-                          icon: const Icon(Icons.more_vert_rounded),
-                        ),
-                      ],
-                    ),
+                      ),
+                      IconButton(
+                        highlightColor: Colors.transparent,
+                        iconSize: 20,
+                        splashRadius: 20,
+                        constraints: const BoxConstraints(),
+                        onPressed: () {},
+                        icon: const Icon(Icons.more_vert_rounded),
+                      ),
+                    ],
                   ),
                 );
               }

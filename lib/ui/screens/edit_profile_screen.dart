@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/providers/user_provider.dart';
 import 'package:twitter/core/services/service_locator.dart';
-import 'package:twitter/core/services/user_service_api.dart';
+import 'package:twitter/core/services/user_service.dart';
 import 'package:twitter/utils/form_util.dart';
 import 'package:twitter/constants/api_constants.dart' as api;
 
@@ -22,7 +22,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController dateController = TextEditingController();
 
-  UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
+  UserService userServiceWeb = serviceLocator<UserService>();
 
   String? avatarName;
   String? bgName;

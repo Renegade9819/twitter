@@ -5,12 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:twitter/constants/api_constants.dart' as api;
 import 'package:twitter/core/models/tweet.dart';
-import 'package:twitter/core/services/tweet_service_api.dart';
 
-class TweetServiceWeb implements TweetServiceAPI {
+class TweetService {
   String apiUrl = api.baseUrl;
 
-  @override
   Future<List<Tweet>> getAllTweets() async {
     List<Tweet> allTweets = [];
 
@@ -27,7 +25,6 @@ class TweetServiceWeb implements TweetServiceAPI {
     }
   }
 
-  @override
   Future<List<Tweet>> getUserLikedTweets(String userName) async {
     List<Tweet> likedTweets = [];
 
@@ -45,7 +42,6 @@ class TweetServiceWeb implements TweetServiceAPI {
     }
   }
 
-  @override
   Future<List<Tweet>> getUserMediaTweets(String userName) async {
     List<Tweet> mediaTweets = [];
 
@@ -63,7 +59,6 @@ class TweetServiceWeb implements TweetServiceAPI {
     }
   }
 
-  @override
   Future<List<Tweet>> getUserTweets(String userName) async {
     List<Tweet> userTweets = [];
 
@@ -80,7 +75,6 @@ class TweetServiceWeb implements TweetServiceAPI {
     }
   }
 
-  @override
   Future<int> postMediaTweet(File mediaFile, String userName) async {
     var mediaTweetUploadURI =
         Uri.parse(apiUrl + "/user/tweet/set/media/$userName");
@@ -104,7 +98,6 @@ class TweetServiceWeb implements TweetServiceAPI {
     }
   }
 
-  @override
   Future<Tweet> postTweet(Tweet tweet) async {
     final response = await http.post(
       Uri.parse(apiUrl + "/tweet/post"),
@@ -120,7 +113,6 @@ class TweetServiceWeb implements TweetServiceAPI {
     }
   }
 
-  @override
   Future<bool> likeTweet(int tweetId, String userName) async {
     final response = await http.put(
       Uri.parse(apiUrl + "/tweet/like/$tweetId/$userName"),
@@ -134,7 +126,6 @@ class TweetServiceWeb implements TweetServiceAPI {
     }
   }
 
-  @override
   Future<bool> unlikeTweet(int tweetId, String userName) async {
     final response = await http.put(
       Uri.parse(apiUrl + "/tweet/unlike/$tweetId/$userName"),

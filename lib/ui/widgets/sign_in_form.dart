@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/providers/user_provider.dart';
 import 'package:twitter/core/services/service_locator.dart';
-import 'package:twitter/core/services/user_service_api.dart';
+import 'package:twitter/core/services/user_service.dart';
 import 'package:twitter/utils/form_util.dart';
 
 class SignInForm extends StatefulWidget {
@@ -21,7 +21,7 @@ class _SignInFormState extends State<SignInForm> {
 
   FormUtility formUtility = FormUtility();
 
-  UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
+  UserService userServiceWeb = serviceLocator<UserService>();
 
   @override
   Widget build(BuildContext context) {

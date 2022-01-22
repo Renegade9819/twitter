@@ -7,26 +7,26 @@ import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/providers/tweet_provider.dart';
 import 'package:twitter/core/providers/user_provider.dart';
 import 'package:twitter/core/services/service_locator.dart';
-import 'package:twitter/core/services/tweet_service_api.dart';
-import 'package:twitter/core/services/user_service_api.dart';
-import 'package:twitter/ui/widgets/CustomSliverAppBarDelegate.dart';
+import 'package:twitter/core/services/tweet_service.dart';
+import 'package:twitter/core/services/user_service.dart';
+import 'package:twitter/ui/widgets/profile_sliver_appbar.dart';
 import 'package:twitter/ui/widgets/tweet_card.dart';
 
-class AnotherProfileScreen extends StatefulWidget {
-  const AnotherProfileScreen({
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  _AnotherProfileScreenState createState() => _AnotherProfileScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _AnotherProfileScreenState extends State<AnotherProfileScreen>
+class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
 
-  UserServiceAPI userServiceWeb = serviceLocator<UserServiceAPI>();
-  final TweetServiceAPI tweetServiceWeb = serviceLocator<TweetServiceAPI>();
+  final UserService userServiceWeb = serviceLocator<UserService>();
+  final TweetService tweetServiceWeb = serviceLocator<TweetService>();
 
   late User currentUser;
   late User passedUser;
@@ -64,7 +64,7 @@ class _AnotherProfileScreenState extends State<AnotherProfileScreen>
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             SliverPersistentHeader(
-              delegate: CustomSliverAppBarDelegate(
+              delegate: ProfileAppBarDelegate(
                 expandedHeight: 200,
                 avatarId: currentUser.avatarId,
                 bgId: currentUser.bgId,

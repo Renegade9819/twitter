@@ -10,8 +10,6 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('Notification'),
-    );
+    return const Text('Notification');
   }
 }

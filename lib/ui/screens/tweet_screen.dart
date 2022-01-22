@@ -10,8 +10,8 @@ import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/providers/tweet_provider.dart';
 import 'package:twitter/core/providers/user_provider.dart';
 import 'package:twitter/core/services/service_locator.dart';
-import 'package:twitter/core/services/tweet_service_api.dart';
-import 'package:twitter/ui/widgets/CustomCircularProgressIndicator.dart';
+import 'package:twitter/core/services/tweet_service.dart';
+import 'package:twitter/ui/widgets/tweet_count_indicator.dart';
 
 class TweetScreen extends StatefulWidget {
   const TweetScreen({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class TweetScreen extends StatefulWidget {
 
 class _TweetScreenState extends State<TweetScreen> {
   TextEditingController tweetController = TextEditingController();
-  final TweetServiceAPI tweetServiceWeb = serviceLocator<TweetServiceAPI>();
+  final TweetService tweetServiceWeb = serviceLocator<TweetService>();
   int tweetLength = 280;
 
   late User loggedInUser;
@@ -188,7 +188,7 @@ class _TweetScreenState extends State<TweetScreen> {
                 SizedBox(
                   width: 20,
                   height: 20,
-                  child: CustomCircularProgressIndicator(
+                  child: TweetCharCountIndicator(
                     controller: tweetController,
                   ),
                 ),
