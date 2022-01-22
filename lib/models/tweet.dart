@@ -13,9 +13,9 @@ class Tweet with _$Tweet {
       required String tweetBody,
       @Default(0) int likes,
       @Default(false) bool isLiked,
+      @Default(false) bool isRetweeted,
       @Default(false) bool containsMedia,
       int? mediaId,
-      String? mediaURL,
       required DateTime postDate,
       required String userName}) = _Tweet;
 

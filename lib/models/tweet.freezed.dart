@@ -27,9 +27,9 @@ class _$TweetTearOff {
       required String tweetBody,
       int likes = 0,
       bool isLiked = false,
+      bool isRetweeted = false,
       bool containsMedia = false,
       int? mediaId,
-      String? mediaURL,
       required DateTime postDate,
       required String userName}) {
     return _Tweet(
@@ -37,9 +37,9 @@ class _$TweetTearOff {
       tweetBody: tweetBody,
       likes: likes,
       isLiked: isLiked,
+      isRetweeted: isRetweeted,
       containsMedia: containsMedia,
       mediaId: mediaId,
-      mediaURL: mediaURL,
       postDate: postDate,
       userName: userName,
     );
@@ -59,9 +59,9 @@ mixin _$Tweet {
   String get tweetBody => throw _privateConstructorUsedError;
   int get likes => throw _privateConstructorUsedError;
   bool get isLiked => throw _privateConstructorUsedError;
+  bool get isRetweeted => throw _privateConstructorUsedError;
   bool get containsMedia => throw _privateConstructorUsedError;
   int? get mediaId => throw _privateConstructorUsedError;
-  String? get mediaURL => throw _privateConstructorUsedError;
   DateTime get postDate => throw _privateConstructorUsedError;
   String get userName => throw _privateConstructorUsedError;
 
@@ -79,9 +79,9 @@ abstract class $TweetCopyWith<$Res> {
       String tweetBody,
       int likes,
       bool isLiked,
+      bool isRetweeted,
       bool containsMedia,
       int? mediaId,
-      String? mediaURL,
       DateTime postDate,
       String userName});
 }
@@ -100,9 +100,9 @@ class _$TweetCopyWithImpl<$Res> implements $TweetCopyWith<$Res> {
     Object? tweetBody = freezed,
     Object? likes = freezed,
     Object? isLiked = freezed,
+    Object? isRetweeted = freezed,
     Object? containsMedia = freezed,
     Object? mediaId = freezed,
-    Object? mediaURL = freezed,
     Object? postDate = freezed,
     Object? userName = freezed,
   }) {
@@ -123,6 +123,10 @@ class _$TweetCopyWithImpl<$Res> implements $TweetCopyWith<$Res> {
           ? _value.isLiked
           : isLiked // ignore: cast_nullable_to_non_nullable
               as bool,
+      isRetweeted: isRetweeted == freezed
+          ? _value.isRetweeted
+          : isRetweeted // ignore: cast_nullable_to_non_nullable
+              as bool,
       containsMedia: containsMedia == freezed
           ? _value.containsMedia
           : containsMedia // ignore: cast_nullable_to_non_nullable
@@ -131,10 +135,6 @@ class _$TweetCopyWithImpl<$Res> implements $TweetCopyWith<$Res> {
           ? _value.mediaId
           : mediaId // ignore: cast_nullable_to_non_nullable
               as int?,
-      mediaURL: mediaURL == freezed
-          ? _value.mediaURL
-          : mediaURL // ignore: cast_nullable_to_non_nullable
-              as String?,
       postDate: postDate == freezed
           ? _value.postDate
           : postDate // ignore: cast_nullable_to_non_nullable
@@ -157,9 +157,9 @@ abstract class _$TweetCopyWith<$Res> implements $TweetCopyWith<$Res> {
       String tweetBody,
       int likes,
       bool isLiked,
+      bool isRetweeted,
       bool containsMedia,
       int? mediaId,
-      String? mediaURL,
       DateTime postDate,
       String userName});
 }
@@ -179,9 +179,9 @@ class __$TweetCopyWithImpl<$Res> extends _$TweetCopyWithImpl<$Res>
     Object? tweetBody = freezed,
     Object? likes = freezed,
     Object? isLiked = freezed,
+    Object? isRetweeted = freezed,
     Object? containsMedia = freezed,
     Object? mediaId = freezed,
-    Object? mediaURL = freezed,
     Object? postDate = freezed,
     Object? userName = freezed,
   }) {
@@ -202,6 +202,10 @@ class __$TweetCopyWithImpl<$Res> extends _$TweetCopyWithImpl<$Res>
           ? _value.isLiked
           : isLiked // ignore: cast_nullable_to_non_nullable
               as bool,
+      isRetweeted: isRetweeted == freezed
+          ? _value.isRetweeted
+          : isRetweeted // ignore: cast_nullable_to_non_nullable
+              as bool,
       containsMedia: containsMedia == freezed
           ? _value.containsMedia
           : containsMedia // ignore: cast_nullable_to_non_nullable
@@ -210,10 +214,6 @@ class __$TweetCopyWithImpl<$Res> extends _$TweetCopyWithImpl<$Res>
           ? _value.mediaId
           : mediaId // ignore: cast_nullable_to_non_nullable
               as int?,
-      mediaURL: mediaURL == freezed
-          ? _value.mediaURL
-          : mediaURL // ignore: cast_nullable_to_non_nullable
-              as String?,
       postDate: postDate == freezed
           ? _value.postDate
           : postDate // ignore: cast_nullable_to_non_nullable
@@ -234,9 +234,9 @@ class _$_Tweet extends _Tweet {
       required this.tweetBody,
       this.likes = 0,
       this.isLiked = false,
+      this.isRetweeted = false,
       this.containsMedia = false,
       this.mediaId,
-      this.mediaURL,
       required this.postDate,
       required this.userName})
       : super._();
@@ -256,11 +256,12 @@ class _$_Tweet extends _Tweet {
   final bool isLiked;
   @JsonKey()
   @override
+  final bool isRetweeted;
+  @JsonKey()
+  @override
   final bool containsMedia;
   @override
   final int? mediaId;
-  @override
-  final String? mediaURL;
   @override
   final DateTime postDate;
   @override
@@ -268,7 +269,7 @@ class _$_Tweet extends _Tweet {
 
   @override
   String toString() {
-    return 'Tweet(tweetId: $tweetId, tweetBody: $tweetBody, likes: $likes, isLiked: $isLiked, containsMedia: $containsMedia, mediaId: $mediaId, mediaURL: $mediaURL, postDate: $postDate, userName: $userName)';
+    return 'Tweet(tweetId: $tweetId, tweetBody: $tweetBody, likes: $likes, isLiked: $isLiked, isRetweeted: $isRetweeted, containsMedia: $containsMedia, mediaId: $mediaId, postDate: $postDate, userName: $userName)';
   }
 
   @override
@@ -281,9 +282,10 @@ class _$_Tweet extends _Tweet {
             const DeepCollectionEquality().equals(other.likes, likes) &&
             const DeepCollectionEquality().equals(other.isLiked, isLiked) &&
             const DeepCollectionEquality()
+                .equals(other.isRetweeted, isRetweeted) &&
+            const DeepCollectionEquality()
                 .equals(other.containsMedia, containsMedia) &&
             const DeepCollectionEquality().equals(other.mediaId, mediaId) &&
-            const DeepCollectionEquality().equals(other.mediaURL, mediaURL) &&
             const DeepCollectionEquality().equals(other.postDate, postDate) &&
             const DeepCollectionEquality().equals(other.userName, userName));
   }
@@ -295,9 +297,9 @@ class _$_Tweet extends _Tweet {
       const DeepCollectionEquality().hash(tweetBody),
       const DeepCollectionEquality().hash(likes),
       const DeepCollectionEquality().hash(isLiked),
+      const DeepCollectionEquality().hash(isRetweeted),
       const DeepCollectionEquality().hash(containsMedia),
       const DeepCollectionEquality().hash(mediaId),
-      const DeepCollectionEquality().hash(mediaURL),
       const DeepCollectionEquality().hash(postDate),
       const DeepCollectionEquality().hash(userName));
 
@@ -318,9 +320,9 @@ abstract class _Tweet extends Tweet {
       required String tweetBody,
       int likes,
       bool isLiked,
+      bool isRetweeted,
       bool containsMedia,
       int? mediaId,
-      String? mediaURL,
       required DateTime postDate,
       required String userName}) = _$_Tweet;
   _Tweet._() : super._();
@@ -336,11 +338,11 @@ abstract class _Tweet extends Tweet {
   @override
   bool get isLiked;
   @override
+  bool get isRetweeted;
+  @override
   bool get containsMedia;
   @override
   int? get mediaId;
-  @override
-  String? get mediaURL;
   @override
   DateTime get postDate;
   @override
