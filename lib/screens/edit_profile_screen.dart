@@ -9,7 +9,7 @@ import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/user_service_api.dart';
 import 'package:twitter/utils/form_util.dart';
-import 'package:twitter/api/api_constants.dart' as api;
+import 'package:twitter/constants/api_constants.dart' as api;
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);

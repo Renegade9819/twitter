@@ -5,7 +5,7 @@ import 'package:twitter/models/tweet.dart';
 import 'package:twitter/services/tweet_service_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:twitter/api/api_constants.dart' as api;
+import 'package:twitter/constants/api_constants.dart' as api;
 
 class TweetServiceWeb implements TweetServiceAPI {
   String apiUrl = api.baseUrl;

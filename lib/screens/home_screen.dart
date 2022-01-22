@@ -6,7 +6,7 @@ import 'package:twitter/screens/navigation_bar_screens/feed_screen.dart';
 import 'package:twitter/screens/navigation_bar_screens/message_screen.dart';
 import 'package:twitter/screens/navigation_bar_screens/notification_screen.dart';
 import 'package:twitter/screens/search_page.dart';
-import 'package:twitter/api/api_constants.dart' as api;
+import 'package:twitter/constants/api_constants.dart' as api;
 import 'package:twitter/widgets/expandable_fab.dart';
 
 class HomeScreen extends StatefulWidget {

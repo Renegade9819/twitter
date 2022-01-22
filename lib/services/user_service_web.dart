@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:twitter/models/user.dart';
 
-import 'package:twitter/api/api_constants.dart' as api;
+import 'package:twitter/constants/api_constants.dart' as api;
 import 'package:twitter/services/user_service_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';

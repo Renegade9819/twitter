@@ -4,13 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter/models/tweet.dart';
 import 'package:twitter/models/user.dart';
-import 'package:twitter/providers/tweet_provider.dart';
 import 'package:twitter/providers/user_provider.dart';
 import 'package:twitter/screens/image_fullscreen.dart';
 import 'package:twitter/services/service_locator.dart';
 import 'package:twitter/services/tweet_service_api.dart';
 import 'package:twitter/services/user_service_api.dart';
-import 'package:twitter/api/api_constants.dart' as api;
+import 'package:twitter/constants/api_constants.dart' as api;
 
 class TweetCard extends StatefulWidget {
   Tweet tweet;
