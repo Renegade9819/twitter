@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:twitter/core/models/user.dart';
+
 import 'package:twitter/core/providers/user_provider.dart';
 import 'package:twitter/core/services/service_locator.dart';
-import 'package:twitter/core/services/user_service.dart';
+import 'package:twitter/core/viewstate.dart';
 import 'package:twitter/utils/form_util.dart';
 
 class SignInForm extends StatefulWidget {
@@ -21,7 +20,7 @@ class _SignInFormState extends State<SignInForm> {
 
   FormUtility formUtility = FormUtility();
 
-  UserService userServiceWeb = serviceLocator<UserService>();
+  UserProvider userProvider = serviceLocator<UserProvider>();
 
   @override
   Widget build(BuildContext context) {
@@ -63,27 +62,29 @@ class _SignInFormState extends State<SignInForm> {
             margin: const EdgeInsets.only(top: 20),
             width: screenWidth - 60,
             height: 50,
-            child: ElevatedButton(
-              onPressed: () async {
-                if (_signInFormKey.currentState!.validate()) {
-                  String userName = userNameController.text;
-                  String password = passwordController.text;
+            child: userProvider.state == ViewState.busy
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: () async {
+                      if (_signInFormKey.currentState!.validate()) {
+                        String userName = userNameController.text;
+                        String password = passwordController.text;
 
-                  await validateLogin(userName, password, context);
-                }
-              },
-              child: const Text(
-                'Sign In',
-                style: TextStyle(
-                  fontSize: 22,
-                ),
-              ),
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(28.0),
-                )),
-              ),
-            ),
+                        await validateLogin(userName, password, context);
+                      }
+                    },
+                    child: const Text(
+                      'Sign In',
+                      style: TextStyle(
+                        fontSize: 22,
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(28.0),
+                      )),
+                    ),
+                  ),
           ),
         ],
       ),
@@ -92,13 +93,11 @@ class _SignInFormState extends State<SignInForm> {
 
   Future<void> validateLogin(
       String userName, String password, BuildContext context) async {
-    bool ifExists = await userServiceWeb.checkIfUserExists(userName);
+    bool ifExists = await userProvider.checkIfUserExists(userName);
 
     if (ifExists) {
-      bool isCorrect = await userServiceWeb.loginUser(userName, password);
+      bool isCorrect = await userProvider.loginUser(userName, password);
       if (isCorrect) {
-        User user = await userServiceWeb.getUser(userName);
-        Provider.of<UserProvider>(context, listen: false).setLoggedInUser(user);
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         const snackBar = SnackBar(

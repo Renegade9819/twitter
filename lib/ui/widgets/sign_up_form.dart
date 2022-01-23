@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/providers/user_provider.dart';
 import 'package:twitter/core/services/service_locator.dart';
-import 'package:twitter/core/services/user_service.dart';
+import 'package:twitter/core/viewstate.dart';
 import 'package:twitter/utils/form_util.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -27,7 +26,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   FormUtility formUtil = FormUtility();
 
-  UserService userServiceWeb = serviceLocator<UserService>();
+  UserProvider userProvider = serviceLocator<UserProvider>();
 
   @override
   void dispose() {
@@ -105,32 +104,36 @@ class _SignUpFormState extends State<SignUpForm> {
             margin: const EdgeInsets.only(top: 20),
             width: screenWidth - 60,
             height: 50,
-            child: ElevatedButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  User user = User(
-                    userName: userNameController.text.trim(),
-                    password: passwordController.text.trim(),
-                    name: nameController.text,
-                    dob: birthDate,
-                    joinDate: DateTime.now(),
-                  );
+            child: userProvider.state == ViewState.busy
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        User user = User(
+                          userName: userNameController.text.trim(),
+                          password: passwordController.text.trim(),
+                          name: nameController.text,
+                          dob: birthDate,
+                          joinDate: DateTime.now(),
+                        );
 
-                  await validateSignUp(user, context);
-                }
-              },
-              child: const Text(
-                'Sign Up',
-                style: TextStyle(
-                  fontSize: 22,
-                ),
-              ),
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(28.0),
-                )),
-              ),
-            ),
+                        await validateSignUp(user, context);
+                      }
+                    },
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        fontSize: 22,
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(28.0),
+                        ),
+                      ),
+                    ),
+                  ),
           ),
         ],
       ),
@@ -138,16 +141,9 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future<void> validateSignUp(User user, BuildContext context) async {
-    bool isRegisterSuccessfull = await userServiceWeb.registerUser(user);
+    bool isRegisterSuccessfull = await userProvider.signUpUser(user);
 
     if (isRegisterSuccessfull) {
-      User newUser = await userServiceWeb.getUser(user.userName);
-
-      print(newUser.toString());
-
-      Provider.of<UserProvider>(context, listen: false)
-          .setLoggedInUser(newUser);
-
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       const snackBar = SnackBar(

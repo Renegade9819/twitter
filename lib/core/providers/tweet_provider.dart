@@ -2,14 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:twitter/core/models/tweet.dart';
 import 'package:twitter/core/services/service_locator.dart';
 import 'package:twitter/core/services/tweet_service.dart';
+import 'package:twitter/core/viewstate.dart';
 
 class TweetProvider with ChangeNotifier {
   final TweetService tweetServiceWeb = serviceLocator<TweetService>();
+
+  ViewState _state = ViewState.idle;
+
+  ViewState get state => _state;
 
   Map<int, Tweet> allTweets = {};
   Map<int, Tweet> likedTweets = {};
   Map<int, Tweet> userTweets = {};
   Map<int, Tweet> userMediaTweets = {};
+
+  void setState(ViewState viewState) {
+    _state = viewState;
+    notifyListeners();
+  }
 
   Future<void> updateLatestTweetList(List<Tweet> updatedTweets) async {
     allTweets = {};

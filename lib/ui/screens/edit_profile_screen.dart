@@ -32,7 +32,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String displayDate = "";
 
   FormUtility formUtil = FormUtility();
-  GlobalKey<FormState> _editFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _editFormKey = GlobalKey<FormState>();
 
   User? user;
   bool isAvatarPicked = false;
@@ -99,7 +99,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ),
                       );
                       Provider.of<UserProvider>(context, listen: false)
-                          .updateLoggedInUser(updatedUser);
+                          .setLoggedInUser(updatedUser);
                     }
                     if (isAvatarPicked) {
                       isAvatarUploaded = await userServiceWeb.uploadUserAvatar(
@@ -110,7 +110,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         User updatedUser =
                             await userServiceWeb.getUser(user!.userName);
                         Provider.of<UserProvider>(context, listen: false)
-                            .updateLoggedInUser(updatedUser);
+                            .setLoggedInUser(updatedUser);
                       } else {
                         print("problem uploading avatar");
                       }
@@ -125,7 +125,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         User updatedUser =
                             await userServiceWeb.getUser(user!.userName);
                         Provider.of<UserProvider>(context, listen: false)
-                            .updateLoggedInUser(updatedUser);
+                            .setLoggedInUser(updatedUser);
                       } else {
                         print("problem uploading background");
                       }
