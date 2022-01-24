@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:twitter/core/models/tweet.dart';
 import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/providers/user_provider.dart';
@@ -9,11 +10,13 @@ import 'package:twitter/core/services/service_locator.dart';
 import 'package:twitter/constants/api_constants.dart' as api;
 import 'package:twitter/core/services/tweet_service.dart';
 import 'package:twitter/core/services/user_service.dart';
+import 'package:twitter/core/viewstate.dart';
 import 'package:twitter/ui/screens/image_fullscreen.dart';
+import 'package:twitter/ui/widgets/shimmer_widget.dart';
 
 class TweetCard extends StatefulWidget {
-  Tweet tweet;
-  TweetCard({
+  final Tweet tweet;
+  const TweetCard({
     Key? key,
     required this.tweet,
   }) : super(key: key);
@@ -25,6 +28,7 @@ class TweetCard extends StatefulWidget {
 class _TweetCardState extends State<TweetCard> {
   final TweetService tweetServiceWeb = serviceLocator<TweetService>();
   final UserService userServiceWeb = serviceLocator<UserService>();
+  final UserProvider userProvider = serviceLocator<UserProvider>();
 
   late Tweet tweet;
 
@@ -35,16 +39,47 @@ class _TweetCardState extends State<TweetCard> {
     super.initState();
   }
 
+  fetchUser(String userName) async {
+    return await userProvider.getUserDetails(userName);
+  }
+
   @override
   Widget build(BuildContext context) {
-    User loggedInUser =
-        Provider.of<UserProvider>(context, listen: false).loggedInUser;
     return FutureBuilder<User>(
         future: userServiceWeb.getUser(tweet.userName),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return Container();
+              return const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: ListTile(
+                  dense: true,
+                  leading: ShimmerWidget.circular(width: 64, height: 64),
+                  title: Align(
+                    alignment: Alignment.centerLeft,
+                    child: ShimmerWidget.rectangular(
+                      width: 140,
+                      height: 20,
+                    ),
+                  ),
+                  subtitle: Padding(
+                    padding: EdgeInsets.only(top: 8.0),
+                    child: ShimmerWidget.rectangular(
+                        width: double.infinity, height: 30),
+                  ),
+                ),
+              );
+            // return Shimmer.fromColors(
+            //     baseColor: Colors.grey[300]!,
+            //     highlightColor: Colors.grey[100]!,
+            //     child: Padding(
+            //       padding: EdgeInsets.all(8.0),
+            //       child: Container(
+            //         width: double.infinity,
+            //         height: 100,
+            //         color: Colors.white,
+            //       ),
+            //     ));
             default:
               if (snapshot.hasError || snapshot.data == null) {
                 return Container();
@@ -61,8 +96,12 @@ class _TweetCardState extends State<TweetCard> {
                           child: CircleAvatar(
                             radius: 25,
                             backgroundColor: Colors.white,
-                            backgroundImage:
-                                buildAvatar(snapshot.data!.avatarId),
+                            backgroundImage: snapshot.data!.avatarId == null
+                                ? const AssetImage(
+                                    "assets/avatars/default_avatar.png")
+                                : NetworkImage(api.avatarUrl +
+                                        "${snapshot.data!.avatarId}")
+                                    as ImageProvider,
                           ),
                         ),
                       ),
@@ -107,8 +146,60 @@ class _TweetCardState extends State<TweetCard> {
                               ),
                               tweet.containsMedia
                                   ? Center(
-                                      child:
-                                          buildMedia(tweet.mediaId!, context))
+                                      child: GestureDetector(
+                                        child: Hero(
+                                          tag: 'imageHeroSmall' +
+                                              tweet.mediaId.toString(),
+                                          child: Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 0),
+                                            constraints: const BoxConstraints(
+                                                maxHeight: 200),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: Image(
+                                                fit: BoxFit.contain,
+                                                image: NetworkImage(
+                                                  api.mediaUrl +
+                                                      "${tweet.mediaId}",
+                                                ),
+                                                frameBuilder: (context,
+                                                    child,
+                                                    frame,
+                                                    wasSynchronouslyLoaded) {
+                                                  if (wasSynchronouslyLoaded) {
+                                                    return child;
+                                                  } else {
+                                                    return AnimatedSwitcher(
+                                                      duration: const Duration(
+                                                          milliseconds: 500),
+                                                      child: frame != null
+                                                          ? child
+                                                          : Container(
+                                                              width: double
+                                                                  .infinity,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () => {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (_) {
+                                              return ImageFullScreen(
+                                                  mediaId: tweet.mediaId!);
+                                            }),
+                                          ),
+                                        },
+                                      ),
+                                    )
                                   : Container(),
                               const SizedBox(height: 10),
                               Row(

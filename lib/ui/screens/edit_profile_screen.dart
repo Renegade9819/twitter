@@ -8,6 +8,7 @@ import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/providers/user_provider.dart';
 import 'package:twitter/core/services/service_locator.dart';
 import 'package:twitter/core/services/user_service.dart';
+import 'package:twitter/core/viewstate.dart';
 import 'package:twitter/utils/form_util.dart';
 import 'package:twitter/constants/api_constants.dart' as api;
 
@@ -23,6 +24,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController dateController = TextEditingController();
 
   UserService userServiceWeb = serviceLocator<UserService>();
+  UserProvider userProvider = serviceLocator<UserProvider>();
 
   String? avatarName;
   String? bgName;
@@ -34,7 +36,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   FormUtility formUtil = FormUtility();
   final GlobalKey<FormState> _editFormKey = GlobalKey<FormState>();
 
-  User? user;
+  User? loggedInUser;
   bool isAvatarPicked = false;
   bool isBgPicked = false;
   late PlatformFile avatarFile;
@@ -42,10 +44,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   void initState() {
-    user = Provider.of<UserProvider>(context, listen: false).loggedInUser;
-    displayDate = DateFormat.yMd().format(user!.dob);
-    birthDate = user!.dob;
-    nameController.text = user!.name;
+    loggedInUser = context.read<UserProvider>().loggedInUser;
+    displayDate = DateFormat.yMd().format(loggedInUser!.dob);
+    birthDate = loggedInUser!.dob;
+    nameController.text = loggedInUser!.name;
     dateController.text = displayDate;
     super.initState();
   }
@@ -84,67 +86,71 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: TextButton(
-                onPressed: () async {
-                  if (_editFormKey.currentState!.validate()) {
-                    String updatedName = nameController.text.trim();
-                    DateTime updatedBday = updatedBirthDate ?? birthDate;
-                    bool isAvatarUploaded;
-                    bool isBgUploaded;
-                    if (isUserFieldChanged(updatedName, updatedBday)) {
-                      User updatedUser = await userServiceWeb.updateUser(
-                        user!.copyWith(
-                          name: updatedName,
-                          dob: updatedBday,
+              child: context.watch<UserProvider>().state == ViewState.busy
+                  ? Center(
+                      child: Container(
+                          margin: const EdgeInsets.only(right: 20),
+                          height: 10,
+                          width: 10,
+                          child: CircularProgressIndicator()),
+                    )
+                  : TextButton(
+                      onPressed: () async {
+                        if (_editFormKey.currentState!.validate()) {
+                          String updatedName = nameController.text.trim();
+                          DateTime updatedBday = updatedBirthDate ?? birthDate;
+                          bool isAvatarUploaded;
+                          bool isBgUploaded;
+                          if (isUserFieldChanged(updatedName, updatedBday)) {
+                            User updatedUser = loggedInUser!.copyWith(
+                              name: updatedName,
+                              dob: updatedBday,
+                            );
+                            await context
+                                .read<UserProvider>()
+                                .updateUserDetails(updatedUser);
+                          }
+                          if (isAvatarPicked) {
+                            isAvatarUploaded = await context
+                                .read<UserProvider>()
+                                .changeAvatar(File(avatarFile.path!),
+                                    loggedInUser!.userName);
+
+                            if (isAvatarUploaded) {
+                              print("avatar uploaded");
+                            } else {
+                              print("problem uploading avatar");
+                            }
+                          }
+
+                          if (isBgPicked) {
+                            isBgUploaded = await context
+                                .read<UserProvider>()
+                                .changeBackground(
+                                    File(bgFile.path!), loggedInUser!.userName);
+
+                            if (isBgUploaded) {
+                              print("background uploaded");
+                            } else {
+                              print("problem uploading background");
+                            }
+                          }
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: const Text(
+                        'Save',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                      Provider.of<UserProvider>(context, listen: false)
-                          .setLoggedInUser(updatedUser);
-                    }
-                    if (isAvatarPicked) {
-                      isAvatarUploaded = await userServiceWeb.uploadUserAvatar(
-                          File(avatarFile.path!), user!.userName);
-
-                      if (isAvatarUploaded) {
-                        print("avatar uploaded");
-                        User updatedUser =
-                            await userServiceWeb.getUser(user!.userName);
-                        Provider.of<UserProvider>(context, listen: false)
-                            .setLoggedInUser(updatedUser);
-                      } else {
-                        print("problem uploading avatar");
-                      }
-                    }
-
-                    if (isBgPicked) {
-                      isBgUploaded = await userServiceWeb.uploadUserBackground(
-                          File(bgFile.path!), user!.userName);
-
-                      if (isBgUploaded) {
-                        print("background uploaded");
-                        User updatedUser =
-                            await userServiceWeb.getUser(user!.userName);
-                        Provider.of<UserProvider>(context, listen: false)
-                            .setLoggedInUser(updatedUser);
-                      } else {
-                        print("problem uploading background");
-                      }
-                    }
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Text(
-                  'Save',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(0.0),
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                ),
-              ),
+                      ),
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(0.0),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                      ),
+                    ),
             ),
           ],
         ),
@@ -152,7 +158,89 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Column(
             children: <Widget>[
               Container(
-                child: buildUserImages(deviceSize),
+                child: SizedBox(
+                  height: deviceSize.height * 0.2,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    clipBehavior: Clip.none,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () async {
+                          FilePickerResult? result =
+                              await FilePicker.platform.pickFiles(
+                            type: FileType.image,
+                          );
+
+                          if (result != null) {
+                            bgFile = result.files.single;
+                            setState(() {
+                              isBgPicked = true;
+                            });
+                          }
+                        },
+                        child: Stack(
+                          fit: StackFit.expand,
+                          clipBehavior: Clip.none,
+                          children: <Widget>[
+                            Image(
+                              image: getBg(),
+                              fit: BoxFit.cover,
+                            ),
+                            Container(
+                              color: Colors.black54,
+                              child: const Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        top: deviceSize.height * 0.14,
+                        left: deviceSize.width * 0.03,
+                        child: GestureDetector(
+                          onTap: () async {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(
+                              type: FileType.image,
+                            );
+
+                            if (result != null) {
+                              avatarFile = result.files.single;
+                              setState(() {
+                                isAvatarPicked = true;
+                              });
+                            }
+                          },
+                          child: Stack(
+                            children: [
+                              CircleAvatar(
+                                minRadius: 40,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  minRadius: 39,
+                                  backgroundImage: getAvatar(),
+                                ),
+                              ),
+                              const CircleAvatar(
+                                backgroundColor: Colors.black45,
+                                minRadius: 40,
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               const SizedBox(height: 40),
               Form(
@@ -200,110 +288,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   bool isUserFieldChanged(String updatedName, DateTime updatedBday) {
-    if (user!.name != updatedName || birthDate != updatedBday) {
+    if (loggedInUser!.name != updatedName || birthDate != updatedBday) {
       return true;
     } else {
       return false;
     }
   }
 
-  Widget buildUserImages(Size deviceSize) {
-    int? avatarId = user!.avatarId;
-    int? bgId = user!.bgId;
-    return SizedBox(
-      height: deviceSize.height * 0.2,
-      child: Stack(
-        fit: StackFit.expand,
-        clipBehavior: Clip.none,
-        children: <Widget>[
-          buildBackground(bgId),
-          Positioned(
-            top: deviceSize.height * 0.14,
-            left: deviceSize.width * 0.03,
-            child: buildAvatar(avatarId),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildBackground(int? bgId) {
-    return GestureDetector(
-      onTap: () async {
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
-          type: FileType.image,
-        );
-
-        if (result != null) {
-          bgFile = result.files.single;
-          setState(() {
-            isBgPicked = true;
-          });
-        }
-      },
-      child: Stack(
-        fit: StackFit.expand,
-        clipBehavior: Clip.none,
-        children: <Widget>[
-          Image(
-            image: getBg(bgId),
-            fit: BoxFit.cover,
-          ),
-          Container(
-            color: Colors.black54,
-            child: const Icon(
-              Icons.edit,
-              color: Colors.white,
-              size: 30,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildAvatar(int? avatarId) {
-    avatarId = null;
-    return GestureDetector(
-      onTap: () async {
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
-          type: FileType.image,
-        );
-
-        if (result != null) {
-          avatarFile = result.files.single;
-          setState(() {
-            isAvatarPicked = true;
-          });
-        }
-      },
-      child: Stack(
-        children: [
-          CircleAvatar(
-            minRadius: 40,
-            backgroundColor: Colors.white,
-            child: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              minRadius: 39,
-              backgroundImage: getAvatar(),
-            ),
-          ),
-          const CircleAvatar(
-            backgroundColor: Colors.black45,
-            minRadius: 40,
-            child: Icon(
-              Icons.edit,
-              color: Colors.white,
-              size: 30,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   ImageProvider<Object> getAvatar() {
-    int? avatarId = user!.avatarId;
+    int? avatarId = loggedInUser!.avatarId;
     if (isAvatarPicked) {
       return FileImage(File(avatarFile.path!));
     } else if (avatarId != null) {
@@ -313,8 +306,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
-  ImageProvider<Object> getBg(int? bgId) {
-    int? bgId = user!.bgId;
+  ImageProvider<Object> getBg() {
+    int? bgId = loggedInUser!.bgId;
     if (isBgPicked) {
       return FileImage(File(bgFile.path!));
     } else if (bgId != null) {

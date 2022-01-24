@@ -25,15 +25,13 @@ class _TweetScreenState extends State<TweetScreen> {
   final TweetService tweetServiceWeb = serviceLocator<TweetService>();
   int tweetLength = 280;
 
-  late User loggedInUser;
+  User loggedInUser = serviceLocator<UserProvider>().loggedInUser;
 
   bool isMediaPicked = false;
   late PlatformFile mediaFile;
 
   @override
   void initState() {
-    loggedInUser =
-        Provider.of<UserProvider>(context, listen: false).loggedInUser;
     super.initState();
   }
 

@@ -38,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   void didChangeDependencies() {
-    User loggedInUser = Provider.of<UserProvider>(context).loggedInUser;
+    User loggedInUser = context.read<UserProvider>().loggedInUser;
 
     if (loggedInUser.userName == widget.passedUser.userName) {
       currentUser = loggedInUser;

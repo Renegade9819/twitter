@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/providers/user_provider.dart';
-import 'package:twitter/core/services/service_locator.dart';
 import 'package:twitter/core/viewstate.dart';
 import 'package:twitter/utils/form_util.dart';
 
@@ -25,8 +25,6 @@ class _SignUpFormState extends State<SignUpForm> {
   TextEditingController dateController = TextEditingController();
 
   FormUtility formUtil = FormUtility();
-
-  UserProvider userProvider = serviceLocator<UserProvider>();
 
   @override
   void dispose() {
@@ -104,7 +102,7 @@ class _SignUpFormState extends State<SignUpForm> {
             margin: const EdgeInsets.only(top: 20),
             width: screenWidth - 60,
             height: 50,
-            child: userProvider.state == ViewState.busy
+            child: context.watch<UserProvider>().state == ViewState.busy
                 ? const CircularProgressIndicator()
                 : ElevatedButton(
                     onPressed: () async {
@@ -141,7 +139,8 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future<void> validateSignUp(User user, BuildContext context) async {
-    bool isRegisterSuccessfull = await userProvider.signUpUser(user);
+    bool isRegisterSuccessfull =
+        await context.read<UserProvider>().signUpUser(user);
 
     if (isRegisterSuccessfull) {
       Navigator.pushReplacementNamed(context, '/home');

@@ -25,18 +25,15 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: ListView.builder(
-          itemCount: context.watch<TweetProvider>().allTweets.length,
-          itemBuilder: (context, index) {
-            int key =
-                context.watch<TweetProvider>().allTweets.keys.elementAt(index);
-            return TweetCard(
-              tweet: context.watch<TweetProvider>().allTweets[key]!,
-            );
-          },
-        ),
+      child: ListView.builder(
+        itemCount: context.watch<TweetProvider>().allTweets.length,
+        itemBuilder: (context, index) {
+          int key =
+              context.watch<TweetProvider>().allTweets.keys.elementAt(index);
+          return TweetCard(
+            tweet: context.watch<TweetProvider>().allTweets[key]!,
+          );
+        },
       ),
       onRefresh: pullRefreshTweets,
     );

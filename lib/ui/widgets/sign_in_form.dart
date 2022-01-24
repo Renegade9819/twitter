@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:twitter/core/providers/user_provider.dart';
 import 'package:twitter/core/services/service_locator.dart';
@@ -62,8 +63,8 @@ class _SignInFormState extends State<SignInForm> {
             margin: const EdgeInsets.only(top: 20),
             width: screenWidth - 60,
             height: 50,
-            child: userProvider.state == ViewState.busy
-                ? const CircularProgressIndicator()
+            child: context.watch<UserProvider>().state == ViewState.busy
+                ? const Center(child: CircularProgressIndicator())
                 : ElevatedButton(
                     onPressed: () async {
                       if (_signInFormKey.currentState!.validate()) {
@@ -93,10 +94,12 @@ class _SignInFormState extends State<SignInForm> {
 
   Future<void> validateLogin(
       String userName, String password, BuildContext context) async {
-    bool ifExists = await userProvider.checkIfUserExists(userName);
+    bool ifExists =
+        await context.read<UserProvider>().checkIfUserExists(userName);
 
     if (ifExists) {
-      bool isCorrect = await userProvider.loginUser(userName, password);
+      bool isCorrect =
+          await context.read<UserProvider>().loginUser(userName, password);
       if (isCorrect) {
         Navigator.pushReplacementNamed(context, '/home');
       } else {

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:twitter/constants/api_constants.dart' as api;
 import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/providers/user_provider.dart';
+import 'package:twitter/core/services/service_locator.dart';
 import 'package:twitter/ui/screens/navigation_bar_screens/feed_screen.dart';
 import 'package:twitter/ui/screens/navigation_bar_screens/message_screen.dart';
 import 'package:twitter/ui/screens/navigation_bar_screens/notification_screen.dart';
@@ -18,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  User? loggedInUser;
+  late User loggedInUser;
 
   int _selectedIndex = 0;
 
@@ -29,8 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
       NotificationScreen(),
       MessageScreen(),
     ];
-    loggedInUser = Provider.of<UserProvider>(context).loggedInUser;
-    int? avatarId = loggedInUser!.avatarId;
+    loggedInUser = context.watch<UserProvider>().loggedInUser;
+    int? avatarId = loggedInUser.avatarId;
     ImageProvider avatarImageWidget;
     if (avatarId == null) {
       avatarImageWidget = const AssetImage("assets/avatars/default_avatar.png");
@@ -46,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/profile',
-                    arguments: loggedInUser!),
+                    arguments: loggedInUser),
                 child: CircleAvatar(
                   radius: 18,
                   backgroundColor: Colors.white,

@@ -30,11 +30,12 @@ class TweetProvider with ChangeNotifier {
   }
 
   Future<void> updateUserTweetsList(List<Tweet> updatedUserTweets) async {
+    setState(ViewState.busy);
     userTweets = {};
     for (var tweet in updatedUserTweets) {
       userTweets[tweet.tweetId!] = tweet;
     }
-    notifyListeners();
+    setState(ViewState.idle);
   }
 
   Future<void> updateUserLikedTweetsList(List<Tweet> updatedLikedTweets) async {
@@ -42,7 +43,7 @@ class TweetProvider with ChangeNotifier {
     for (var tweet in updatedLikedTweets) {
       likedTweets[tweet.tweetId!] = tweet;
     }
-    notifyListeners();
+    //notifyListeners();
   }
 
   Future<void> updateUserMediaTweetList(List<Tweet> updatedMediaTweets) async {
@@ -50,7 +51,7 @@ class TweetProvider with ChangeNotifier {
     for (var tweet in updatedMediaTweets) {
       userMediaTweets[tweet.tweetId!] = tweet;
     }
-    notifyListeners();
+    //notifyListeners();
   }
 
   void addToAllTweets(Tweet tweet) {
