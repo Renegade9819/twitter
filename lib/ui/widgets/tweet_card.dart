@@ -226,8 +226,7 @@ ImageProvider buildAvatar(int? avatarId) {
 }
 
 String getTweetPostDate(DateTime postDate) {
-  String formattedPostDate = DateFormat.d().format(postDate);
-  print(formattedPostDate);
+  String formattedPostDate = DateFormat.MEd().format(postDate);
   return formattedPostDate;
 }
 

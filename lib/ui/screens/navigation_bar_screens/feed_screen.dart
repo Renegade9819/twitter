@@ -29,42 +29,41 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget build(BuildContext context) {
     if (context.watch<TweetProvider>().state == ViewState.busy) {
       return ListView.builder(
-          itemCount: 8,
-          itemBuilder: (context, index) {
-            return const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: ListTile(
-                dense: true,
-                leading: ShimmerWidget.circular(width: 64, height: 64),
-                title: Align(
-                  alignment: Alignment.centerLeft,
-                  child: ShimmerWidget.rectangular(
-                    width: 140,
-                    height: 20,
-                  ),
-                ),
-                subtitle: Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: ShimmerWidget.rectangular(
-                      width: double.infinity, height: 30),
+        itemCount: 8,
+        itemBuilder: (context, index) {
+          return const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: ListTile(
+              dense: true,
+              leading: ShimmerWidget.circular(width: 64, height: 64),
+              title: Align(
+                alignment: Alignment.centerLeft,
+                child: ShimmerWidget.rectangular(
+                  width: 140,
+                  height: 20,
                 ),
               ),
-            );
-          });
+              subtitle: Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: ShimmerWidget.rectangular(
+                    width: double.infinity, height: 30),
+              ),
+            ),
+          );
+        },
+      );
     } else {
       return PlaneIndicator(
         child: ListView.builder(
-            itemCount: context.watch<TweetProvider>().allTweets.length,
-            itemBuilder: (context, index) {
-              int key = context
-                  .watch<TweetProvider>()
-                  .allTweets
-                  .keys
-                  .elementAt(index);
-              return TweetCard(
-                tweet: context.watch<TweetProvider>().allTweets[key]!,
-              );
-            }),
+          itemCount: context.watch<TweetProvider>().allTweets.length,
+          itemBuilder: (context, index) {
+            int key =
+                context.watch<TweetProvider>().allTweets.keys.elementAt(index);
+            return TweetCard(
+              tweet: context.watch<TweetProvider>().allTweets[key]!,
+            );
+          },
+        ),
       );
     }
 

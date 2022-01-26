@@ -11,6 +11,7 @@ import 'package:twitter/core/providers/tweet_provider.dart';
 import 'package:twitter/core/providers/user_provider.dart';
 import 'package:twitter/core/services/service_locator.dart';
 import 'package:twitter/core/services/tweet_service.dart';
+import 'package:twitter/core/viewstate.dart';
 import 'package:twitter/ui/widgets/tweet_count_indicator.dart';
 
 class TweetScreen extends StatefulWidget {
@@ -61,66 +62,86 @@ class _TweetScreenState extends State<TweetScreen> {
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: ElevatedButton(
-                onPressed: () async {
-                  String tweetBody = tweetController.text.trim();
-                  if (tweetBody.isEmpty) {
-                    const snackBar = SnackBar(
-                      content: Text("Tweet does not contain any text."),
-                    );
+              child: context.watch<TweetProvider>().state == ViewState.busy
+                  ? Center(
+                      child: Container(
+                          margin: const EdgeInsets.only(right: 20),
+                          height: 10,
+                          width: 10,
+                          child: const CircularProgressIndicator()),
+                    )
+                  : ElevatedButton(
+                      onPressed: () async {
+                        String tweetBody = tweetController.text.trim();
+                        if (tweetBody.isEmpty) {
+                          const snackBar = SnackBar(
+                            content: Text("Tweet does not contain any text."),
+                          );
 
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  } else {
-                    if (isMediaPicked == false) {
-                      Tweet postTweet = Tweet(
-                        tweetBody: tweetBody,
-                        postDate: DateTime.now(),
-                        user: loggedInUser,
-                      );
-                      Tweet postedTweet =
-                          await tweetServiceWeb.postTweet(postTweet);
-                      TweetProvider tweetProvider =
-                          Provider.of<TweetProvider>(context, listen: false);
-                      tweetProvider.addToAllTweets(postedTweet);
-                      tweetProvider.addToUserTweets(postedTweet);
-                      Navigator.pop(context);
-                    } else {
-                      int mediaId = await tweetServiceWeb.postMediaTweet(
-                          File(mediaFile.path!), loggedInUser.userName);
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        } else {
+                          if (isMediaPicked == false) {
+                            Provider.of<TweetProvider>(context, listen: false)
+                                .setState(ViewState.busy);
+                            Tweet postTweet = Tweet(
+                              tweetBody: tweetBody,
+                              postDate: DateTime.now(),
+                              user: loggedInUser,
+                            );
+                            Tweet postedTweet =
+                                await tweetServiceWeb.postTweet(postTweet);
+                            TweetProvider tweetProvider =
+                                Provider.of<TweetProvider>(context,
+                                    listen: false);
+                            tweetProvider.addToAllTweets(postedTweet);
+                            tweetProvider.addToUserTweets(postedTweet);
+                            Provider.of<TweetProvider>(context, listen: false)
+                                .setState(ViewState.idle);
+                            Navigator.pop(context);
+                          } else {
+                            Provider.of<TweetProvider>(context, listen: false)
+                                .setState(ViewState.busy);
+                            int mediaId = await tweetServiceWeb.postMediaTweet(
+                                File(mediaFile.path!), loggedInUser.userName);
 
-                      Tweet postTweet = Tweet(
-                        tweetBody: tweetBody,
-                        postDate: DateTime.now(),
-                        user: loggedInUser,
-                        containsMedia: true,
-                        mediaId: mediaId,
-                      );
+                            Tweet postTweet = Tweet(
+                              tweetBody: tweetBody,
+                              postDate: DateTime.now(),
+                              user: loggedInUser,
+                              containsMedia: true,
+                              mediaId: mediaId,
+                            );
 
-                      Tweet postedTweet =
-                          await tweetServiceWeb.postTweet(postTweet);
+                            Tweet postedTweet =
+                                await tweetServiceWeb.postTweet(postTweet);
 
-                      TweetProvider tweetProvider =
-                          Provider.of<TweetProvider>(context, listen: false);
-                      tweetProvider.addToAllTweets(postedTweet);
-                      tweetProvider.addToUserMediaTweets(postedTweet);
-                      Navigator.pop(context);
-                    }
-                  }
-                },
-                child: const Text(
-                  'Tweet',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                style: ButtonStyle(
-                    elevation: MaterialStateProperty.all(0.0),
-                    backgroundColor: MaterialStateProperty.all(Colors.blue),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ))),
-              ),
+                            TweetProvider tweetProvider =
+                                Provider.of<TweetProvider>(context,
+                                    listen: false);
+                            tweetProvider.addToAllTweets(postedTweet);
+                            tweetProvider.addToUserMediaTweets(postedTweet);
+                            Provider.of<TweetProvider>(context, listen: false)
+                                .setState(ViewState.idle);
+                            Navigator.pop(context);
+                          }
+                        }
+                      },
+                      child: const Text(
+                        'Tweet',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ButtonStyle(
+                          elevation: MaterialStateProperty.all(0.0),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue),
+                          shape:
+                              MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ))),
+                    ),
             ),
           ],
         ),

@@ -92,7 +92,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           margin: const EdgeInsets.only(right: 20),
                           height: 10,
                           width: 10,
-                          child: CircularProgressIndicator()),
+                          child: const CircularProgressIndicator()),
                     )
                   : TextButton(
                       onPressed: () async {
