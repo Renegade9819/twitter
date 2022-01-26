@@ -15,7 +15,7 @@ _$_Tweet _$$_TweetFromJson(Map<String, dynamic> json) => _$_Tweet(
       containsMedia: json['containsMedia'] as bool? ?? false,
       mediaId: json['mediaId'] as int?,
       postDate: DateTime.parse(json['postDate'] as String),
-      userName: json['userName'] as String,
+      user: User.fromJson(json['user'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_TweetToJson(_$_Tweet instance) => <String, dynamic>{
@@ -27,5 +27,5 @@ Map<String, dynamic> _$$_TweetToJson(_$_Tweet instance) => <String, dynamic>{
       'containsMedia': instance.containsMedia,
       'mediaId': instance.mediaId,
       'postDate': instance.postDate.toIso8601String(),
-      'userName': instance.userName,
+      'user': instance.user.toJson(),
     };

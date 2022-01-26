@@ -25,13 +25,14 @@ class _TweetScreenState extends State<TweetScreen> {
   final TweetService tweetServiceWeb = serviceLocator<TweetService>();
   int tweetLength = 280;
 
-  User loggedInUser = serviceLocator<UserProvider>().loggedInUser;
+  late User loggedInUser;
 
   bool isMediaPicked = false;
   late PlatformFile mediaFile;
 
   @override
   void initState() {
+    loggedInUser = context.read<UserProvider>().loggedInUser;
     super.initState();
   }
 
@@ -74,7 +75,7 @@ class _TweetScreenState extends State<TweetScreen> {
                       Tweet postTweet = Tweet(
                         tweetBody: tweetBody,
                         postDate: DateTime.now(),
-                        userName: loggedInUser.userName,
+                        user: loggedInUser,
                       );
                       Tweet postedTweet =
                           await tweetServiceWeb.postTweet(postTweet);
@@ -90,7 +91,7 @@ class _TweetScreenState extends State<TweetScreen> {
                       Tweet postTweet = Tweet(
                         tweetBody: tweetBody,
                         postDate: DateTime.now(),
-                        userName: loggedInUser.userName,
+                        user: loggedInUser,
                         containsMedia: true,
                         mediaId: mediaId,
                       );

@@ -103,7 +103,7 @@ class _SignUpFormState extends State<SignUpForm> {
             width: screenWidth - 60,
             height: 50,
             child: context.watch<UserProvider>().state == ViewState.busy
-                ? const CircularProgressIndicator()
+                ? const Center(child: CircularProgressIndicator())
                 : ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {

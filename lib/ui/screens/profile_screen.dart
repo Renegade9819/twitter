@@ -33,6 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   void initState() {
     tabController = TabController(length: 3, vsync: this);
+    setState(() {});
     super.initState();
   }
 
@@ -55,191 +56,208 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverPersistentHeader(
-              delegate: ProfileAppBarDelegate(
-                expandedHeight: 200,
-                avatarId: currentUser.avatarId,
-                bgId: currentUser.bgId,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverPersistentHeader(
+                delegate: ProfileAppBarDelegate(
+                  expandedHeight: 200,
+                  avatarId: currentUser.avatarId,
+                  bgId: currentUser.bgId,
+                ),
+                pinned: true,
               ),
-              pinned: true,
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(20, 40, 0, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            currentUser.name,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '@' + currentUser.userName,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    isLoggedInUser
-                        ? Container(
-                            margin: const EdgeInsets.only(right: 20),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/editProfile',
-                                    arguments: currentUser);
-                              },
-                              child: const Text(
-                                'Edit Profile',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(20, 40, 0, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              currentUser.name,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.white),
-                                overlayColor:
-                                    MaterialStateProperty.all(Colors.black26),
-                                side: MaterialStateProperty.all(
-                                  const BorderSide(style: BorderStyle.solid),
+                            ),
+                            Text(
+                              '@' + currentUser.userName,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      isLoggedInUser
+                          ? Container(
+                              margin: const EdgeInsets.only(right: 20),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/editProfile',
+                                      arguments: currentUser);
+                                },
+                                child: const Text(
+                                  'Edit Profile',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.white),
+                                  overlayColor:
+                                      MaterialStateProperty.all(Colors.black26),
+                                  side: MaterialStateProperty.all(
+                                    const BorderSide(style: BorderStyle.solid),
+                                  ),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
-                        : Container(),
-                  ],
-                ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(20, 10, 0, 0),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          const Icon(
-                            Icons.bubble_chart,
-                            color: Colors.black54,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            'Born ' +
-                                DateFormat.yMMMd().format(currentUser.dob),
-                            style: const TextStyle(fontWeight: FontWeight.w300),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: <Widget>[
-                          const Icon(
-                            Icons.calendar_today,
-                            color: Colors.black54,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            'Joined ' +
-                                DateFormat.yMMMd().format(currentUser.joinDate),
-                            style: const TextStyle(fontWeight: FontWeight.w300),
-                          ),
-                        ],
-                      ),
+                            )
+                          : Container(),
                     ],
                   ),
-                ),
-              ]),
-            ),
-            // extended_slivers package
-            SliverPinnedToBoxAdapter(
-              child: Container(
-                color: Colors.white,
-                child: Material(
-                  type: MaterialType.transparency,
-                  child: TabBar(controller: tabController, tabs: const [
-                    Tab(
-                      child: Text(
-                        'Tweets',
-                        style: TextStyle(color: Colors.black),
-                      ),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            const Icon(
+                              Icons.bubble_chart,
+                              color: Colors.black54,
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              'Born ' +
+                                  DateFormat.yMMMd().format(currentUser.dob),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: <Widget>[
+                            const Icon(
+                              Icons.calendar_today,
+                              color: Colors.black54,
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              'Joined ' +
+                                  DateFormat.yMMMd()
+                                      .format(currentUser.joinDate),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    Tab(
-                      child: Text(
-                        'Likes',
-                        style: TextStyle(color: Colors.black),
+                  ),
+                ]),
+              ),
+              // extended_slivers package
+              SliverPinnedToBoxAdapter(
+                child: Container(
+                  color: Colors.white,
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: TabBar(controller: tabController, tabs: const [
+                      Tab(
+                        child: Text(
+                          'Tweets',
+                          style: TextStyle(color: Colors.black),
+                        ),
                       ),
-                    ),
-                    Tab(
-                      child: Text(
-                        'Media',
-                        style: TextStyle(color: Colors.black),
+                      Tab(
+                        child: Text(
+                          'Likes',
+                          style: TextStyle(color: Colors.black),
+                        ),
                       ),
-                    )
-                  ]),
+                      Tab(
+                        child: Text(
+                          'Media',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      )
+                    ]),
+                  ),
                 ),
               ),
-            ),
-          ];
-        },
-        body: TabBarView(
-          controller: tabController,
-          children: [
-            Consumer<TweetProvider>(builder: (context, tweets, child) {
-              return tweets.userTweets.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: tweets.userTweets.length,
-                      itemBuilder: (context, index) {
-                        int key = tweets.userTweets.keys.elementAt(index);
-                        return TweetCard(
-                          tweet: tweets.userTweets[key]!,
-                        );
-                      },
-                    )
-                  : Container();
-            }),
-            Consumer<TweetProvider>(builder: (context, tweets, child) {
-              return tweets.likedTweets.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: tweets.likedTweets.length,
-                      itemBuilder: (context, index) {
-                        int key = tweets.userTweets.keys.elementAt(index);
-                        return TweetCard(
-                          tweet: tweets.likedTweets[key]!,
-                        );
-                      },
-                    )
-                  : Container();
-            }),
-            Consumer<TweetProvider>(builder: (context, tweets, child) {
-              return tweets.userMediaTweets.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: tweets.userMediaTweets.length,
-                      itemBuilder: (context, index) {
-                        int key = tweets.userMediaTweets.keys.elementAt(index);
-                        return TweetCard(
-                          tweet: tweets.userMediaTweets[key]!,
-                        );
-                      },
-                    )
-                  : Container();
-            }),
-          ],
+            ];
+          },
+          body: TabBarView(
+            controller: tabController,
+            children: [
+              Consumer<TweetProvider>(builder: (context, tweets, child) {
+                return ListView.builder(
+                  itemCount: tweets.userTweets.length,
+                  itemBuilder: (context, index) {
+                    int key = tweets.userTweets.keys.elementAt(index);
+                    return TweetCard(
+                      tweet: tweets.userTweets[key]!,
+                    );
+                  },
+                );
+              }),
+              // Consumer<TweetProvider>(builder: (context, tweets, child) {
+              //   return tweets.userTweets.isNotEmpty
+              //       ? ListView.builder(
+              //           itemCount: tweets.userTweets.length,
+              //           itemBuilder: (context, index) {
+              //             int key = tweets.userTweets.keys.elementAt(index);
+              //             return TweetCard(
+              //               tweet: tweets.userTweets[key]!,
+              //             );
+              //           },
+              //         )
+              //       : Container();
+              // }),
+              Consumer<TweetProvider>(builder: (context, tweets, child) {
+                return tweets.likedTweets.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: tweets.likedTweets.length,
+                        itemBuilder: (context, index) {
+                          int key = tweets.userTweets.keys.elementAt(index);
+                          return TweetCard(
+                            tweet: tweets.likedTweets[key]!,
+                          );
+                        },
+                      )
+                    : Container();
+              }),
+              Consumer<TweetProvider>(builder: (context, tweets, child) {
+                return tweets.userMediaTweets.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: tweets.userMediaTweets.length,
+                        itemBuilder: (context, index) {
+                          int key =
+                              tweets.userMediaTweets.keys.elementAt(index);
+                          return TweetCard(
+                            tweet: tweets.userMediaTweets[key]!,
+                          );
+                        },
+                      )
+                    : Container();
+              }),
+            ],
+          ),
         ),
       ),
     );

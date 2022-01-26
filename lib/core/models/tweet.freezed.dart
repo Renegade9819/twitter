@@ -31,7 +31,7 @@ class _$TweetTearOff {
       bool containsMedia = false,
       int? mediaId,
       required DateTime postDate,
-      required String userName}) {
+      required User user}) {
     return _Tweet(
       tweetId: tweetId,
       tweetBody: tweetBody,
@@ -41,7 +41,7 @@ class _$TweetTearOff {
       containsMedia: containsMedia,
       mediaId: mediaId,
       postDate: postDate,
-      userName: userName,
+      user: user,
     );
   }
 
@@ -63,7 +63,7 @@ mixin _$Tweet {
   bool get containsMedia => throw _privateConstructorUsedError;
   int? get mediaId => throw _privateConstructorUsedError;
   DateTime get postDate => throw _privateConstructorUsedError;
-  String get userName => throw _privateConstructorUsedError;
+  User get user => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -83,7 +83,9 @@ abstract class $TweetCopyWith<$Res> {
       bool containsMedia,
       int? mediaId,
       DateTime postDate,
-      String userName});
+      User user});
+
+  $UserCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -104,7 +106,7 @@ class _$TweetCopyWithImpl<$Res> implements $TweetCopyWith<$Res> {
     Object? containsMedia = freezed,
     Object? mediaId = freezed,
     Object? postDate = freezed,
-    Object? userName = freezed,
+    Object? user = freezed,
   }) {
     return _then(_value.copyWith(
       tweetId: tweetId == freezed
@@ -139,11 +141,18 @@ class _$TweetCopyWithImpl<$Res> implements $TweetCopyWith<$Res> {
           ? _value.postDate
           : postDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      userName: userName == freezed
-          ? _value.userName
-          : userName // ignore: cast_nullable_to_non_nullable
-              as String,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User,
     ));
+  }
+
+  @override
+  $UserCopyWith<$Res> get user {
+    return $UserCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value));
+    });
   }
 }
 
@@ -161,7 +170,10 @@ abstract class _$TweetCopyWith<$Res> implements $TweetCopyWith<$Res> {
       bool containsMedia,
       int? mediaId,
       DateTime postDate,
-      String userName});
+      User user});
+
+  @override
+  $UserCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -183,7 +195,7 @@ class __$TweetCopyWithImpl<$Res> extends _$TweetCopyWithImpl<$Res>
     Object? containsMedia = freezed,
     Object? mediaId = freezed,
     Object? postDate = freezed,
-    Object? userName = freezed,
+    Object? user = freezed,
   }) {
     return _then(_Tweet(
       tweetId: tweetId == freezed
@@ -218,16 +230,17 @@ class __$TweetCopyWithImpl<$Res> extends _$TweetCopyWithImpl<$Res>
           ? _value.postDate
           : postDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      userName: userName == freezed
-          ? _value.userName
-          : userName // ignore: cast_nullable_to_non_nullable
-              as String,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_Tweet extends _Tweet {
   _$_Tweet(
       {this.tweetId,
@@ -238,7 +251,7 @@ class _$_Tweet extends _Tweet {
       this.containsMedia = false,
       this.mediaId,
       required this.postDate,
-      required this.userName})
+      required this.user})
       : super._();
 
   factory _$_Tweet.fromJson(Map<String, dynamic> json) =>
@@ -265,11 +278,11 @@ class _$_Tweet extends _Tweet {
   @override
   final DateTime postDate;
   @override
-  final String userName;
+  final User user;
 
   @override
   String toString() {
-    return 'Tweet(tweetId: $tweetId, tweetBody: $tweetBody, likes: $likes, isLiked: $isLiked, isRetweeted: $isRetweeted, containsMedia: $containsMedia, mediaId: $mediaId, postDate: $postDate, userName: $userName)';
+    return 'Tweet(tweetId: $tweetId, tweetBody: $tweetBody, likes: $likes, isLiked: $isLiked, isRetweeted: $isRetweeted, containsMedia: $containsMedia, mediaId: $mediaId, postDate: $postDate, user: $user)';
   }
 
   @override
@@ -287,7 +300,7 @@ class _$_Tweet extends _Tweet {
                 .equals(other.containsMedia, containsMedia) &&
             const DeepCollectionEquality().equals(other.mediaId, mediaId) &&
             const DeepCollectionEquality().equals(other.postDate, postDate) &&
-            const DeepCollectionEquality().equals(other.userName, userName));
+            const DeepCollectionEquality().equals(other.user, user));
   }
 
   @override
@@ -301,7 +314,7 @@ class _$_Tweet extends _Tweet {
       const DeepCollectionEquality().hash(containsMedia),
       const DeepCollectionEquality().hash(mediaId),
       const DeepCollectionEquality().hash(postDate),
-      const DeepCollectionEquality().hash(userName));
+      const DeepCollectionEquality().hash(user));
 
   @JsonKey(ignore: true)
   @override
@@ -324,7 +337,7 @@ abstract class _Tweet extends Tweet {
       bool containsMedia,
       int? mediaId,
       required DateTime postDate,
-      required String userName}) = _$_Tweet;
+      required User user}) = _$_Tweet;
   _Tweet._() : super._();
 
   factory _Tweet.fromJson(Map<String, dynamic> json) = _$_Tweet.fromJson;
@@ -346,7 +359,7 @@ abstract class _Tweet extends Tweet {
   @override
   DateTime get postDate;
   @override
-  String get userName;
+  User get user;
   @override
   @JsonKey(ignore: true)
   _$TweetCopyWith<_Tweet> get copyWith => throw _privateConstructorUsedError;

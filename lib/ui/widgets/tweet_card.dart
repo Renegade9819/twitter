@@ -45,276 +45,215 @@ class _TweetCardState extends State<TweetCard> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<User>(
-        future: userServiceWeb.getUser(tweet.userName),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: ListTile(
-                  dense: true,
-                  leading: ShimmerWidget.circular(width: 64, height: 64),
-                  title: Align(
-                    alignment: Alignment.centerLeft,
-                    child: ShimmerWidget.rectangular(
-                      width: 140,
-                      height: 20,
-                    ),
-                  ),
-                  subtitle: Padding(
-                    padding: EdgeInsets.only(top: 8.0),
-                    child: ShimmerWidget.rectangular(
-                        width: double.infinity, height: 30),
-                  ),
-                ),
-              );
-            // return Shimmer.fromColors(
-            //     baseColor: Colors.grey[300]!,
-            //     highlightColor: Colors.grey[100]!,
-            //     child: Padding(
-            //       padding: EdgeInsets.all(8.0),
-            //       child: Container(
-            //         width: double.infinity,
-            //         height: 100,
-            //         color: Colors.white,
-            //       ),
-            //     ));
-            default:
-              if (snapshot.hasError || snapshot.data == null) {
-                return Container();
-              } else {
-                return Card(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    return Card(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          GestureDetector(
+            onTap: () =>
+                Navigator.pushNamed(context, '/profile', arguments: tweet.user),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
+              child: CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.white,
+                backgroundImage: tweet.user.avatarId == null
+                    ? const AssetImage("assets/avatars/default_avatar.png")
+                    : NetworkImage(api.avatarUrl + "${tweet.user.avatarId}")
+                        as ImageProvider,
+              ),
+            ),
+          ),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
                     children: <Widget>[
-                      GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, '/profile',
-                            arguments: snapshot.data),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
-                          child: CircleAvatar(
-                            radius: 25,
-                            backgroundColor: Colors.white,
-                            backgroundImage: snapshot.data!.avatarId == null
-                                ? const AssetImage(
-                                    "assets/avatars/default_avatar.png")
-                                : NetworkImage(api.avatarUrl +
-                                        "${snapshot.data!.avatarId}")
-                                    as ImageProvider,
-                          ),
-                        ),
+                      Text(
+                        tweet.user.name,
                       ),
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    snapshot.data!.name,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    '@' + snapshot.data!.userName,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  const Text(
-                                    '•',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w300),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    getTweetPostDate(tweet.postDate),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 3),
-                              Text(
-                                tweet.tweetBody,
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.visible,
-                              ),
-                              tweet.containsMedia
-                                  ? Center(
-                                      child: GestureDetector(
-                                        child: Hero(
-                                          tag: 'imageHeroSmall' +
-                                              tweet.mediaId.toString(),
-                                          child: Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 10, horizontal: 0),
-                                            constraints: const BoxConstraints(
-                                                maxHeight: 200),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: Image(
-                                                fit: BoxFit.contain,
-                                                image: NetworkImage(
-                                                  api.mediaUrl +
-                                                      "${tweet.mediaId}",
-                                                ),
-                                                frameBuilder: (context,
-                                                    child,
-                                                    frame,
-                                                    wasSynchronouslyLoaded) {
-                                                  if (wasSynchronouslyLoaded) {
-                                                    return child;
-                                                  } else {
-                                                    return AnimatedSwitcher(
-                                                      duration: const Duration(
-                                                          milliseconds: 500),
-                                                      child: frame != null
-                                                          ? child
-                                                          : Container(
-                                                              width: double
-                                                                  .infinity,
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                    );
-                                                  }
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        onTap: () => {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (_) {
-                                              return ImageFullScreen(
-                                                  mediaId: tweet.mediaId!);
-                                            }),
-                                          ),
-                                        },
-                                      ),
-                                    )
-                                  : Container(),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  IconButton(
-                                    highlightColor: Colors.transparent,
-                                    iconSize: 16,
-                                    padding: EdgeInsets.zero,
-                                    splashRadius: 20,
-                                    constraints: const BoxConstraints(),
-                                    onPressed: () {},
-                                    icon:
-                                        const Icon(CupertinoIcons.chat_bubble),
-                                  ),
-                                  IconButton(
-                                    highlightColor: Colors.transparent,
-                                    iconSize: 16,
-                                    padding: EdgeInsets.zero,
-                                    splashRadius: 20,
-                                    constraints: const BoxConstraints(),
-                                    color: isRetweeted
-                                        ? Colors.green
-                                        : Colors.black,
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                        CupertinoIcons.arrow_2_squarepath),
-                                  ),
-                                  IconButton(
-                                    highlightColor: Colors.transparent,
-                                    iconSize: 16,
-                                    padding: EdgeInsets.zero,
-                                    splashRadius: 20,
-                                    constraints: const BoxConstraints(),
-                                    color: tweet.isLiked
-                                        ? Colors.red
-                                        : Colors.black,
-                                    onPressed: () {},
-                                    icon: tweet.isLiked
-                                        ? const Icon(CupertinoIcons.heart_fill)
-                                        : const Icon(CupertinoIcons.heart),
-                                  ),
-                                  IconButton(
-                                    highlightColor: Colors.transparent,
-                                    iconSize: 16,
-                                    padding: EdgeInsets.zero,
-                                    splashRadius: 20,
-                                    constraints: const BoxConstraints(),
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.share_outlined),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
+                      const SizedBox(width: 5),
+                      Text(
+                        '@' + tweet.user.userName,
+                        style: const TextStyle(fontWeight: FontWeight.w300),
                       ),
-                      IconButton(
-                        highlightColor: Colors.transparent,
-                        iconSize: 20,
-                        splashRadius: 20,
-                        constraints: const BoxConstraints(),
-                        onPressed: () {},
-                        icon: const Icon(Icons.more_vert_rounded),
+                      const SizedBox(width: 5),
+                      const Text(
+                        '•',
+                        style: TextStyle(fontWeight: FontWeight.w300),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        getTweetPostDate(tweet.postDate),
+                        style: const TextStyle(fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),
-                );
-              }
-          }
-        });
-  }
-
-  ImageProvider buildAvatar(int? avatarId) {
-    ImageProvider imageWidget;
-    if (avatarId == null) {
-      imageWidget = const AssetImage("assets/avatars/default_avatar.png");
-      return imageWidget;
-    } else {
-      imageWidget = NetworkImage(api.avatarUrl + "$avatarId");
-      return imageWidget;
-    }
-  }
-
-  String getTweetPostDate(DateTime postDate) {
-    String formattedPostDate = DateFormat.d().format(postDate);
-    print(formattedPostDate);
-    return formattedPostDate;
-  }
-
-  Widget buildMedia(int mediaId, context) {
-    return GestureDetector(
-      child: Hero(
-        tag: 'imageHeroSmall' + mediaId.toString(),
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-          constraints: const BoxConstraints(maxHeight: 200),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              api.mediaUrl + "$mediaId",
-              fit: BoxFit.contain,
+                  const SizedBox(height: 3),
+                  Text(
+                    tweet.tweetBody,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.visible,
+                  ),
+                  tweet.containsMedia
+                      ? Center(
+                          child: GestureDetector(
+                            child: Hero(
+                              tag: 'imageHeroSmall' + tweet.mediaId.toString(),
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 0),
+                                constraints:
+                                    const BoxConstraints(maxHeight: 200),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image(
+                                    fit: BoxFit.contain,
+                                    image: NetworkImage(
+                                      api.mediaUrl + "${tweet.mediaId}",
+                                    ),
+                                    frameBuilder: (context, child, frame,
+                                        wasSynchronouslyLoaded) {
+                                      if (wasSynchronouslyLoaded) {
+                                        return child;
+                                      } else {
+                                        return AnimatedSwitcher(
+                                          duration:
+                                              const Duration(milliseconds: 500),
+                                          child: frame != null
+                                              ? child
+                                              : Container(
+                                                  width: double.infinity,
+                                                  color: Colors.grey,
+                                                ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) {
+                                  return ImageFullScreen(
+                                      mediaId: tweet.mediaId!);
+                                }),
+                              ),
+                            },
+                          ),
+                        )
+                      : Container(),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      IconButton(
+                        highlightColor: Colors.transparent,
+                        iconSize: 16,
+                        padding: EdgeInsets.zero,
+                        splashRadius: 20,
+                        constraints: const BoxConstraints(),
+                        onPressed: () {},
+                        icon: const Icon(CupertinoIcons.chat_bubble),
+                      ),
+                      IconButton(
+                        highlightColor: Colors.transparent,
+                        iconSize: 16,
+                        padding: EdgeInsets.zero,
+                        splashRadius: 20,
+                        constraints: const BoxConstraints(),
+                        color: isRetweeted ? Colors.green : Colors.black,
+                        onPressed: () {},
+                        icon: const Icon(CupertinoIcons.arrow_2_squarepath),
+                      ),
+                      IconButton(
+                        highlightColor: Colors.transparent,
+                        iconSize: 16,
+                        padding: EdgeInsets.zero,
+                        splashRadius: 20,
+                        constraints: const BoxConstraints(),
+                        color: tweet.isLiked ? Colors.red : Colors.black,
+                        onPressed: () {},
+                        icon: tweet.isLiked
+                            ? const Icon(CupertinoIcons.heart_fill)
+                            : const Icon(CupertinoIcons.heart),
+                      ),
+                      IconButton(
+                        highlightColor: Colors.transparent,
+                        iconSize: 16,
+                        padding: EdgeInsets.zero,
+                        splashRadius: 20,
+                        constraints: const BoxConstraints(),
+                        onPressed: () {},
+                        icon: const Icon(Icons.share_outlined),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
+          ),
+          IconButton(
+            highlightColor: Colors.transparent,
+            iconSize: 20,
+            splashRadius: 20,
+            constraints: const BoxConstraints(),
+            onPressed: () {},
+            icon: const Icon(Icons.more_vert_rounded),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+ImageProvider buildAvatar(int? avatarId) {
+  ImageProvider imageWidget;
+  if (avatarId == null) {
+    imageWidget = const AssetImage("assets/avatars/default_avatar.png");
+    return imageWidget;
+  } else {
+    imageWidget = NetworkImage(api.avatarUrl + "$avatarId");
+    return imageWidget;
+  }
+}
+
+String getTweetPostDate(DateTime postDate) {
+  String formattedPostDate = DateFormat.d().format(postDate);
+  print(formattedPostDate);
+  return formattedPostDate;
+}
+
+Widget buildMedia(int mediaId, context) {
+  return GestureDetector(
+    child: Hero(
+      tag: 'imageHeroSmall' + mediaId.toString(),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+        constraints: const BoxConstraints(maxHeight: 200),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image.network(
+            api.mediaUrl + "$mediaId",
+            fit: BoxFit.contain,
           ),
         ),
       ),
-      onTap: () => {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) {
-            return ImageFullScreen(mediaId: mediaId);
-          }),
-        ),
-      },
-    );
-  }
+    ),
+    onTap: () => {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) {
+          return ImageFullScreen(mediaId: mediaId);
+        }),
+      ),
+    },
+  );
 }

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:twitter/core/models/user.dart';
 
 part 'tweet.freezed.dart';
 part 'tweet.g.dart';
@@ -7,6 +8,7 @@ part 'tweet.g.dart';
 class Tweet with _$Tweet {
   Tweet._();
 
+  @JsonSerializable(explicitToJson: true)
   factory Tweet(
       {int? tweetId,
       required String tweetBody,
@@ -16,7 +18,7 @@ class Tweet with _$Tweet {
       @Default(false) bool containsMedia,
       int? mediaId,
       required DateTime postDate,
-      required String userName}) = _Tweet;
+      required User user}) = _Tweet;
 
   factory Tweet.fromJson(Map<String, dynamic> json) => _$TweetFromJson(json);
 }

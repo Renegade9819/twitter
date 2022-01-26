@@ -87,7 +87,7 @@ class ProfileAppBarDelegate extends SliverPersistentHeaderDelegate {
             fit: BoxFit.cover,
           ),
           Positioned(
-            top: 3,
+            top: 4,
             left: 4,
             child: shrinkOffset * 0.7 > 40
                 ? const SizedBox.shrink()
@@ -111,15 +111,18 @@ class ProfileAppBarDelegate extends SliverPersistentHeaderDelegate {
     } else {
       imageWidget = NetworkImage(api.avatarUrl + "$avatarId");
     }
-    return Opacity(
-      opacity: disappear(shrinkOffset),
-      child: CircleAvatar(
-        minRadius: 40 - shrinkOffset * 0.12,
-        backgroundColor: Colors.white,
+    return Hero(
+      tag: 'profilePic',
+      child: Opacity(
+        opacity: disappear(shrinkOffset),
         child: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          minRadius: 39 - shrinkOffset * 0.12,
-          backgroundImage: imageWidget,
+          minRadius: 40 - shrinkOffset * 0.12,
+          backgroundColor: Colors.white,
+          child: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            minRadius: 39 - shrinkOffset * 0.12,
+            backgroundImage: imageWidget,
+          ),
         ),
       ),
     );

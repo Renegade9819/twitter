@@ -21,8 +21,19 @@ class TweetProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getLatestTweets(List<Tweet> tweets) async {
+    setState(ViewState.busy);
+    allTweets = {};
+    await Future.delayed(const Duration(seconds: 3));
+    for (var tweet in tweets) {
+      allTweets[tweet.tweetId!] = tweet;
+    }
+    setState(ViewState.idle);
+  }
+
   Future<void> updateLatestTweetList(List<Tweet> updatedTweets) async {
     allTweets = {};
+    //await Future.delayed(const Duration(seconds: 3));
     for (var tweet in updatedTweets) {
       allTweets[tweet.tweetId!] = tweet;
     }
