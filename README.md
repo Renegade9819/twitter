@@ -6,7 +6,27 @@ Ahead of master branch. Will be the final app.
 
 The API is developed with Spring Boot. I'll post it on GitHub soon.
 
-`Note:` The app is currently in development. The tweet functionality is not fully completed. Messages and notifications are pending.
+`Note:` The app is currently in development.
+
+## Finished Features -
+* User
+    * User Sign In / Sign Up
+    * Edit Profile
+    * View Another user's profile
+    * Search Users
+
+* Tweet
+    * View all Tweets, User Tweets, liked tweets, and Media Tweets.
+    * Post a tweet / tweet with media.
+
+## Pending Features -
+* Tweet
+    * Like a Tweet
+    * Retweet a Tweet
+    * Comment on a Tweet
+    * Share a Tweet
+* Notifications
+* Messages
 
 <img src="https://user-images.githubusercontent.com/20268535/149674926-44a5328c-d9b0-47af-a50c-a66e0fc77b28.png" width=40% height=40%>
 
