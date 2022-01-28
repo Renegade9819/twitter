@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:twitter/constants/api_constants.dart' as api;
 import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/providers/user_provider.dart';
-import 'package:twitter/core/services/service_locator.dart';
 import 'package:twitter/ui/screens/navigation_bar_screens/feed_screen.dart';
 import 'package:twitter/ui/screens/navigation_bar_screens/message_screen.dart';
 import 'package:twitter/ui/screens/navigation_bar_screens/notification_screen.dart';

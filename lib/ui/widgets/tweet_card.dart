@@ -1,18 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:twitter/core/models/tweet.dart';
-import 'package:twitter/core/models/user.dart';
 import 'package:twitter/core/providers/user_provider.dart';
 import 'package:twitter/core/services/service_locator.dart';
 import 'package:twitter/constants/api_constants.dart' as api;
 import 'package:twitter/core/services/tweet_service.dart';
 import 'package:twitter/core/services/user_service.dart';
-import 'package:twitter/core/viewstate.dart';
 import 'package:twitter/ui/screens/image_fullscreen.dart';
-import 'package:twitter/ui/widgets/shimmer_widget.dart';
 
 class TweetCard extends StatefulWidget {
   final Tweet tweet;
