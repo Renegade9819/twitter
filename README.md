@@ -2,8 +2,6 @@
 
 The Twitter app made using Flutter.
 
-Ahead of master branch. Will be the final app.
-
 The API is developed with Spring Boot. I'll post it on GitHub soon.
 
 `Note:` The app is currently in development.
