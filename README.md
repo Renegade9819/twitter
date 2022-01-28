@@ -1,6 +1,6 @@
 # twitter
 
-The Twitter app made using Flutter.
+The Twitter app made using Flutter. The UI is not an exact clone. It's just a project I am doing to improve at Flutter.
 
 The API is developed with Spring Boot. I'll post it on GitHub soon.
 
